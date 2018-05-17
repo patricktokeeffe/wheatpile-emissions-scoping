@@ -1,7 +1,34 @@
 # Wheatpile Emissions Scoping Study
 
-Data acquisition for May 2018 wheat pile dust emissions scoping study. 
-Pile begins moving May 7th; targeting May 14-18 for msmts.
+Source code and documentation for wheat pile emission study scoping hardware.
+There are two main components:
+
+* A stationary site located upwind with
+    * Fine aerosol (PM<sub>2.5</sub>) monitor ([DustTrak 8530; TSI](http://www.tsi.com/DUSTTRAK-II-Aerosol-Monitor-8530/))
+    * Carbon dioxide (CO<sub>2</sub>) analyzer ([LI-840A; LICOR Biosciences](https://www.licor.com/env/products/gas_analysis/LI-840A/))
+    * 3D ultrasonic anemometer ([CSAT3B; Campbell Scientific](https://www.campbellsci.com/csat3b))
+    * GPS receiver ([GPS16X-HVS; Garmin](https://www.campbellsci.com/gps16x-hvs))
+    * Regulated point-release of CO<sub>2</sub> via multiple mass flow controllers ([Alicat brand](https://www.alicat.com/product/gas-mass-flow-controllers/))
+* A mobile station with
+    * Fine aerosol (PM<sub>2.5</sub>) monitor ([DustTrak 8530; TSI](http://www.tsi.com/DUSTTRAK-II-Aerosol-Monitor-8530/))
+    * Carbon dioxide (CO<sub>2</sub>) analyzer ([LI-840A; LICOR Biosciences](https://www.licor.com/env/products/gas_analysis/LI-840A/))
+    * Compact weather station (T/RH/DP/P/WS/WD) with integral GPS ([150WX; Airmar Technologies](http://www.airmartechnology.com/productdescription.html?id=155))
+
+Programmable dataloggers ([CR1000; Campbell Scientific](http://www.campbellsci.com/cr1000))
+acquire and store data to internal memory media. Raw measurements are stored on
+their acquisition time base (10Hz for sonic data, 1Hz otherwise) and aggregated
+to 1-min values. Data is only retained in logger memory; there is no telemetry
+component.
+
+
+## Quick Start
+
+**TODO**
+
+
+## Data Products 
+
+**TODO**
 
 
 ## Prep checklists
