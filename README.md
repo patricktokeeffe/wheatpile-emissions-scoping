@@ -25,6 +25,17 @@ component.
 
 **TODO**
 
+### Tracer release station
+
+* Setup the tripod
+    * Attach sonic anemometer to 1.5" cross arm
+    * Attach GPS unit (stored inside enclosure) to magnetic plate
+    * Attach black aerosol & PFA gas sampling tubes (stored inside enclosure)
+* Setup the instrument enclosure
+    * Connect power strip to extension cord (from generator)
+    * Connect data cable to sonic anemometer
+
+
 
 ## Data Products 
 
@@ -69,6 +80,16 @@ Probably an open-bed pick-up.. except motor pool only has those in towing size.
 * [x] cigarette-lighter inverter
     * [ ] verify operates OK on internal DC socket
 * [x] road worthy enclosure that sufficiently elevates inlets and is securable to vehicle
+
+## Initial Setup Notes
+
+### Wiring
+
+See this [Word document](wiring.docx). *Sorry, it's a .docx because we can edit
+it, print it neatly, and still get basic diffs.*
+
+
+
 
 ## References
 
