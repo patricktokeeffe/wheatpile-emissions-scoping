@@ -70,4 +70,25 @@ Probably an open-bed pick-up.. except motor pool only has those in towing size.
     * [ ] verify operates OK on internal DC socket
 * [x] road worthy enclosure that sufficiently elevates inlets and is securable to vehicle
 
+## References
+
+* Campbell Scientific, Inc. *CR1000 Measurement and Control System Operator's
+  Manual.* Revision 2018 Feb. 
+  Online: <https://s.campbellsci.com/documents/us/manuals/cr1000.pdf>
+
+* Campbell Scientific, Inc. *CRBasic Program Reference: WindVector.* Version
+  CR1000.Std.32. CRBasic Editor.
+
+* Campbell Scientific, Inc. *CSAT3B Three-Dimensional Sonic Anemometer.* Revision
+  2018 Mar. Online: <https://s.campbellsci.com/documents/us/manuals/csat3b.pdf>
+
+* Campbell Scientific, Inc. *GPS16X-HVS GPS Receiver Instruction Manual.*
+  Revision 2017 Oct. Online: <https://s.campbellsci.com/documents/us/manuals/gps16x-hvs.pdf>
+
+* Airmar Technology Corp. *PB100 WeatherStation Technical Manual.* Revision 1.007.
+  Online: <http://www.airmartechnology.com/uploads/installguide/PB100TechnicalManual_rev1.007.pdf>
+
+* Airmar Technology Corp. *Ultrasonic WeatherStation Instrument Owner's Guide &
+  Installation Instructions.* Revision 2016 Jan 28.
+  Online: <http://airmartechnology.com/uploads/InstallGuide/17-461-01.pdf>
 
