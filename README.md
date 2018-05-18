@@ -51,14 +51,15 @@ component.
 
 ### Data systems
 
-#### Stationary site
+#### Tracer release station
 
 CO2 (tracer) point-source release equipment
 
 * [x] ~~pure CO2 tanks~~ *ordered (4) 50# tanks*
 * [x] regulator *possibly two*
 * [ ] digital flowmeter *possibly two*
-* [x] ~~DustTrak II w/ PM2.5 inlet~~ *unit #1*
+* [x] ~~DustTrak II w/ PM2.5 inlet~~ *unit #1 (s/n 8530150710)*
+    * [ ] verify logger program has correct det. scaling from IAQ study
 * [ ] Licor LI-840A CO2/H2O analyzer + pump
 * [ ] Campbellsci datalogger
     * [ ] check for latest firmware *32.02*
@@ -70,7 +71,8 @@ CO2 (tracer) point-source release equipment
 
 Probably an open-bed pick-up.. except motor pool only has those in towing size.
 
-* [x] ~~DustTrak II w/ PM2.5 inlet~~ *unit #2*
+* [x] ~~DustTrak II w/ PM2.5 inlet~~ *unit #2 (s/n 8530152108)*
+    * [x] verify logger program has correct det. scaling from IAQ study
     * [ ] needs internal battery back from unit #1
 * [ ] Licor LI-840A CO2/H2O analyzer + pump
 * [ ] Airmar unit for WX+GPS
@@ -81,6 +83,13 @@ Probably an open-bed pick-up.. except motor pool only has those in towing size.
     * [ ] verify operates OK on internal DC socket
 * [x] road worthy enclosure that sufficiently elevates inlets and is securable to vehicle
 
+### Logger program
+
+* [ ] incorporate DustTrak analog scaling from IAQ
+* [ ] add backup msmts of analog CO2 analyzer signal (bc I don't trust their serial ports anymore)
+* [ ] verify Licor analog scaling full range setting
+
+
 ## Initial Setup Notes
 
 ### Wiring
@@ -88,7 +97,15 @@ Probably an open-bed pick-up.. except motor pool only has those in towing size.
 See this [Word document](wiring.docx). *Sorry, it's a .docx because we can edit
 it, print it neatly, and still get basic diffs.*
 
+### Instrument Configuration
 
+#### LI-840A
+
+**TODO** verify analog voltage scaling
+
+#### 150WX
+
+**TODO** copy weather station instrument setup from LCV-HCHO-landfill-tower repo
 
 
 ## References
