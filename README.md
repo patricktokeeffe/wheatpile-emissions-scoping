@@ -35,6 +35,14 @@ component.
     * Connect power strip to extension cord (from generator)
     * Connect data cable to sonic anemometer
 
+### Plume monitoring station
+
+* Enclosure goes in flatbed pickup with ext cord to inverter
+* Inverter goes inside vehicle, using 12V accessory port
+
+> Starting the vehicle will cut inverter output and cause the DustTrak and
+> logger to restart. If the DustTrak is sampling when this occurs, it will
+> automatically recover back into sampling mode.
 
 
 ## Data Products 
@@ -46,7 +54,7 @@ component.
 
 ### Scouting visit prep
 
-* [x] prep DustTrak II w/ PM 2.5 inlet, extra battery
+* [x] prep both DustTrak II units w/ PM<sub>2.5</sub> & PM<sub>10</sub> inlets
 * [x] verify Kestrel weather meter working OK, print user manual
 
 ### Data systems
@@ -55,32 +63,34 @@ component.
 
 CO2 (tracer) point-source release equipment
 
-* [x] ~~pure CO2 tanks~~ *ordered (4) 50# tanks*
-* [x] regulator *possibly two*
-* [ ] digital flowmeter *possibly two*
-* [x] ~~DustTrak II w/ PM2.5 inlet~~ *unit #1 (s/n 8530150710)*
+* [x] pure CO2 tanks *ordered (4) 50# tanks*
+* [x] regulator *order one new, other from IAQ*
+* [x] digital flowmeter *one 50SLPM from 415, other 20LPM from IAQ*
+* [x] DustTrak II w/ PM2.5 inlet *unit #1 (s/n 8530150710)*
     * [ ] verify logger program has correct det. scaling from IAQ study
-* [ ] Licor LI-840A CO2/H2O analyzer + pump
+* [ ] Licor LI-840A CO2/H2O analyzer + pump *unit #2 (s/n HGA-2573)
 * [ ] Campbellsci datalogger
     * [ ] check for latest firmware *32.02*
-    * [ ] load program
+    * [ ] finish program
 * [ ] extension cord & power strip
-* [ ] small Honda generator *order or buy?*
+* [x] small Honda generator *bought Honda EU2200 generator*
+    * [ ] test operation
 
 #### Plume monitoring vehicle
 
 Probably an open-bed pick-up.. except motor pool only has those in towing size.
 
-* [x] ~~DustTrak II w/ PM2.5 inlet~~ *unit #2 (s/n 8530152108)*
+* [x] DustTrak II w/ PM2.5 inlet *unit #2 (s/n 8530152108)*
     * [x] verify logger program has correct det. scaling from IAQ study
-    * [ ] needs internal battery back from unit #1
-* [ ] Licor LI-840A CO2/H2O analyzer + pump
-* [ ] Airmar unit for WX+GPS
+    * [x] needs internal battery back from unit #1
+* [x] Licor LI-840A CO2/H2O analyzer + pump *unit #1 (s/n HGA-1666)*
+* [x] Airmar unit for WX+GPS *150WX from IAQ*
+    * [ ] verify NMEA sentence config
 * [x] Campbellsci datalogger *s/n 50905*
     * [x] check for latest firmware *32.02*
-    * [ ] load program
-* [x] cigarette-lighter inverter
-    * [ ] verify operates OK on internal DC socket
+    * [ ] finish program
+* [x] cigarette-lighter inverter *black 400W unit*
+    * [x] verify operates OK on internal DC socket
 * [x] road worthy enclosure that sufficiently elevates inlets and is securable to vehicle
 
 ### Logger program
