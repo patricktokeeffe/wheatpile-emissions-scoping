@@ -12,6 +12,11 @@
 
 Const DAYS_OF_DATA = 28
 
+Const LI840A_COM = Com1
+Const LI840A_BAUD = 9600
+Const LI840A_FMT = 3 '8/n/1, RS232 logic
+Const LI840A_REC = 120
+Const LI840A_BUFF = LI840A_REC*2 + 1
 
 Const WX_COM = Com2   'C1/C2
 Const WX_BAUD = 4800
@@ -27,6 +32,23 @@ Const TSI_PM_MLT = (1.0 - TSI_PM_OFF)/5000 '0-1.0 mg/m^3, 0-5V
 'Const TSI_PM_OFF = 0.008 'XXXX unit-specific calibration offset (sn 8530150710)
 'Const TSI_PM_MLT = (1.0 - TSI_PM_OFF)/5000 '0-1.0 mg/m^3, 0-5V
 
+
+Public li840a_config As String * 300
+Public li840a_resp As String * 32
+Public li840a_record As String * LI840A_REC
+Public li840a(6)
+Alias li840a(1) = li840a_cell_T
+Alias li840a(2) = li840a_cell_P
+Alias li840a(3) = li840a_CO2
+Alias li840a(4) = li840a_pwr_src
+Alias li840a(5) = li840a_H2O
+Alias li840a(6) = li840a_dewpoint
+Units li840a_cell_T = degC
+Units li840a_cell_P = kPa
+Units li840a_CO2 = ppm
+Units li840a_pwr_src = Vdc
+Units li840a_H2O = ppth
+Units li840a_dewpoint = degC
 
 Public dusttrak2_analog_pm25
 Units dusttrak2_analog_pm25 = mg/m^3
@@ -107,6 +129,8 @@ Units mag_variation = degEofTN
 DataTable(tsdata,True,86400)
   DataInterval(0,1,Sec,5)
   CardOut(0,86400*DAYS_OF_DATA)
+  Sample(1,li840a_CO2,IEEE4)
+  Sample(1,li840a_H2O,IEEE4)
   Sample(1,m150wx_P,IEEE4)
   Sample(1,m150wx_T,FP2)
   Sample(1,m150wx_RH,FP2)
@@ -124,10 +148,16 @@ DataTable(minutely,True,-1)
   DataInterval(0,1,Min,1)
   CardOut(0,1440*DAYS_OF_DATA)
   Sample(1,dusttrak2_analog_pm25,IEEE4)
-  Median(1,m150wx_P,60,IEEE4,m150wx_P=NAN)
-  Median(1,m150wx_T,60,FP2,m150wx_T=NAN)
-  Median(1,m150wx_RH,60,FP2,m150wx_RH=NAN)
-  Median(1,m150wx_WS,60,FP2,m150wx_WS=NAN)
+  Average(1,li840a_CO2,IEEE4,li840a_CO2=NAN)
+  Average(1,li840a_H2O,IEEE4,li840a_H2O=NAN)
+  Average(1,li840a_cell_T,IEEE4,li840a_cell_T=NAN)
+  Average(1,li840a_cell_P,IEEE4,li840a_cell_P=NAN)
+  Average(1,li840a_dewpoint,IEEE4,li840a_dewpoint=NAN)
+  Average(1,li840a_pwr_src,IEEE4,li840a_pwr_src=NAN)
+  Average(1,m150wx_P,IEEE4,m150wx_P=NAN)
+  Average(1,m150wx_T,FP2,m150wx_T=NAN)
+  Average(1,m150wx_RH,FP2,m150wx_RH=NAN)
+  Average(1,m150wx_WS,FP2,m150wx_WS=NAN)
   Median(1,m150wx_WD,60,FP2,m150wx_WD=NAN)
 EndTable
 
@@ -137,9 +167,23 @@ BeginProg
   SetStatus("StationName", "wheatpile-plume")
   SerialOpen(WX_COM,WX_BAUD,WX_FMT,0,WX_BUFF)
   Move(metvals(1),10,NAN,1)
+  li840a_config = ("<li840><cfg><outrate>1</outrate></cfg><rs232><co2>true</co2>" & _
+        "<co2abs>false</co2abs><h2o>true</h2o><h2odewpoint>true</h2odewpoint>" & _
+        "<h2oabs>false</h2oabs><celltemp>true</celltemp><cellpres>true</cellpres>" & _
+        "<ivolt>true</ivolt><raw>false</raw><strip>true</strip></rs232></li840>")
+  li840a_resp = ("<li840><ack>true</ack></li840>")
+  SerialOpen(LI840A_COM,LI840A_BAUD,LI840A_FMT,0,LI840A_BUFF)
+  SerialOut(LI840A_COM,li840a_config,li840a_resp,3,1)
 
 	Scan (1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm25,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
+
+    SerialIn(li840a_record,LI840A_COM,50,&h0A,LI840A_BUFF)
+    If (Len(li840a_record)) Then
+      SplitStr(li840a(1),li840a_record,"",6,0)
+    Else
+      Move(li840a(1),6,NAN,1)
+    EndIf
 	  
     SerialInRecord(WX_COM,wimda,DOLLAR_W,0,CRLF,wx_bytes,110)
     SerialInRecord(WX_COM,gprmc,DOLLAR_G,0,CRLF,gps_bytes,110)
