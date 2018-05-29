@@ -27,13 +27,21 @@ component.
 
 ### Tracer release station
 
-* Setup the tripod
-    * Attach sonic anemometer to 1.5" cross arm
-    * Attach GPS unit (stored inside enclosure) to magnetic plate
-    * Attach black aerosol & PFA gas sampling tubes (stored inside enclosure)
-* Setup the instrument enclosure
+* Setup the monitoring tripod (short plastic gray & black tripod)
+    * Attach sonic anemometer to 1.5" cross arm and connect data cable
+    * Attach 10ft black aerosol tube to DustTrak inlet 
+    * Attach 10ft PFA gas tube to orange coupler on CO2 analyzer inlet
+* Setup the instrument enclosure (blue cooler)
     * Connect power strip to extension cord (from generator)
     * Connect data cable to sonic anemometer
+    * Place GPS receiver on gray magnetic mounting plate
+* Setup the release station (large stainless steel tripod)
+    * Strap CO2 release tanks upright against tripod mast
+    * Install CO2 tank regulators
+        * **TODO** add heat tape notes
+    * Use ~12ft coupler tubes to connect regulators to associated flow controller:
+      small one for 20 SLPM, large one for 50 SLPM (mismatch may cause freeze-up)
+    * Connect ~8ft leader tubes to flow controller outlets
 
 ### Plume monitoring station
 
@@ -65,6 +73,9 @@ CO2 (tracer) point-source release equipment
 
 * [x] pure CO2 tanks *ordered (4) 50# tanks*
 * [x] regulator *order one new, other from IAQ*
+    * [x] test for regulator freeze-up *does frost over but direct sunlight is
+          sufficient to prevent freezing; tested up to full range 20+50 SLPM*
+    * [ ] install heat tape on new regulator
 * [x] digital flowmeter *one 50SLPM from 415, other 20LPM from IAQ*
 * [x] DustTrak II w/ PM2.5 inlet *unit #1 (s/n 8530150710)*
     * [ ] verify logger program has correct det. scaling from IAQ study
