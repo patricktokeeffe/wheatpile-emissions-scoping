@@ -12,8 +12,6 @@
 
 Const DAYS_OF_DATA = 28
 
-' [] increase resolution of latitude/longitude, probably by keeping
-'    separate degrees and decimal degrees
 
 Const WX_COM = Com2   'C1/C2
 Const WX_BAUD = 4800
@@ -75,9 +73,6 @@ Units m150wx_WS = m/s
 'to require the GPGGA sentence. Consider jumpering COM2 to COM1 Rx and
 'acquiring GPS data more neatly and also get time updates. May conflict 
 'with `NetworkTimeProtocol`?
-
-'TODO FIXME: storing latitude/longitude values in Float truncates them beyond
-'required precision for mapping
 
 Public gpsstrs(13) As String * 16
 ' "PRMC" consumed
