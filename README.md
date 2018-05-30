@@ -55,6 +55,8 @@ component.
 
 ## Data Products 
 
+Data is recorded in Pacific Daylight Time (Z-0700).
+
 **TODO**
 
 

@@ -11,6 +11,12 @@
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 Const DAYS_OF_DATA = 7
+Const UTC_OFFSET = -7 'Pacific Daylight Time
+
+Const NTP_SERVER = "1.us.pool.ntp.org"
+Const MAX_CLOCK_DRIFT = 500 'ms
+Public ntp_offset
+Units ntp_offset = ms
 
 Const LI840A_COM = Com1 'C1/C2
 Const LI840A_BAUD = 9600
@@ -238,6 +244,10 @@ BeginProg
     CallTable(minutely)
 	NextScan
 
+  SlowSequence
+  Scan(5,min,1,0)
+    ntp_offset = NetworkTimeProtocol(NTP_SERVER,UTC_OFFSET*3600,MAX_CLOCK_DRIFT)
+  NextScan
 EndProg
 
 
