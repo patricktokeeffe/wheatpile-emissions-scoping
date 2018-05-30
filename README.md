@@ -124,11 +124,17 @@ it, print it neatly, and still get basic diffs.*
 
 #### LI-840A
 
-**TODO** verify analog voltage scaling
+The logger program sends a configuration command at start-up which enables the 
+correct settings for serial communication with the analyzer.
+
+Additionally, use the [manufacturer software](https://www.licor.com/env/products/gas_analysis/LI-840A/software.html)
+to configure the *DAC Output* to 5V range and *DAC 1 Source* to *CO2* (0-2500 ppm).
 
 #### 150WX
 
-**TODO** copy weather station instrument setup from LCV-HCHO-landfill-tower repo
+Use [Airmar WeatherCaster](http://www.airmartechnology.com/software-downloads.html)
+to disable all NMEA0183 sentences *except* `WIMDA` and `GPRMC`. Keep the
+default 1Hz (`0:01.00`) interval.
 
 
 ## References
