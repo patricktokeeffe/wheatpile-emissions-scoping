@@ -180,7 +180,7 @@ EndTable
 
 '===========================================================================
 BeginProg
-  SetStatus("StationName", "wheatpile-plume")
+  SetStatus("StationName", "tracer-mobile")
   SerialOpen(WX_COM,WX_BAUD,WX_FMT,0,WX_BUFF)
   Move(metvals(1),10,NAN,1)
   li840a_config = ("<li840><cfg><outrate>1</outrate></cfg><rs232><co2>true</co2>" & _
