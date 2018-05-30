@@ -10,7 +10,7 @@
 ' Laboratory for Atmospheric Research at Washington State University
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Const DAYS_OF_DATA = 28
+Const DAYS_OF_DATA = 7
 
 Const LI840A_COM = Com1
 Const LI840A_BAUD = 9600
@@ -126,9 +126,10 @@ Units longitude_min = minutesE
 Units mag_variation = degEofTN
 
 
-DataTable(tsdata,True,86400)
+DataTable(tsdata,True,-1)
   DataInterval(0,1,Sec,5)
   CardOut(0,86400*DAYS_OF_DATA)
+  Sample(1,dusttrak2_analog_pm25,FP2)
   Sample(1,li840a_CO2,IEEE4)
   Sample(1,li840a_H2O,IEEE4)
   Sample(1,m150wx_P,IEEE4)
@@ -147,7 +148,7 @@ EndTable
 DataTable(minutely,True,-1)
   DataInterval(0,1,Min,1)
   CardOut(0,1440*DAYS_OF_DATA)
-  Sample(1,dusttrak2_analog_pm25,IEEE4)
+  Sample(1,dusttrak2_analog_pm25,FP2)
   Average(1,li840a_CO2,IEEE4,li840a_CO2=NAN)
   Average(1,li840a_H2O,IEEE4,li840a_H2O=NAN)
   Average(1,li840a_cell_T,IEEE4,li840a_cell_T=NAN)
