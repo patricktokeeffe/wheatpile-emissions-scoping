@@ -1,42 +1,31 @@
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 ' Wheat pile emission scoping study May 2018
 '
-' Source code for mobile station (plume) logger. Responsible for:
+' Source code for stationary station (background) logger. Responsible for:
 '   * TSI DustTrak II - aerosol monitor
 '   * LICOR Biosciences LI-840A - CO2 analyzer
-'   * Airmar Tech 150WX - compact weather station + GPS
+'   * Garmin GPS16X-HVS - GPS receiver
 '
 ' Copyright 2018 :: Patrick O'Keeffe
 ' Laboratory for Atmospheric Research at Washington State University
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Const DAYS_OF_DATA = 7
 Const UTC_OFFSET = -7 'Pacific Daylight Time
+Const DAYS_OF_DATA = 7
 
-Const NTP_SERVER = "1.us.pool.ntp.org"
-Const MAX_CLOCK_DRIFT = 500 'ms
-Public ntp_offset
-Units ntp_offset = ms
-
-Const LI840A_COM = Com1 'C1/C2
+Const LI840A_COM = Com4
 Const LI840A_BAUD = 9600
 Const LI840A_FMT = 3 '8/n/1, RS232 logic
 Const LI840A_REC = 120
 Const LI840A_BUFF = LI840A_REC*2 + 1
 
-Const WX_COM = Com2   'C3/C4
-Const WX_BAUD = 4800
-Const WX_FMT = 3 '8/n/1, RS232
-Const WX_BUFF = 250
-Const DOLLAR_W = &h2457 ' "$W"
-Const DOLLAR_G = &h2447 ' "$G"
-Const CRLF = &h0D0A ' <CR><LF>
+Const GPS_COM_ADDR    = Com4  'GPS serial input port #
 
 Const DF_TSI_PM = 1
-Const TSI_PM_OFF = 0.0103 'XXXX unit-specific calibration offset (sn 8530152108)
-Const TSI_PM_MLT = (1.0 - TSI_PM_OFF)/5000 '0-1.0 mg/m^3, 0-5V
-'Const TSI_PM_OFF = 0.008 'XXXX unit-specific calibration offset (sn 8530150710)
+'Const TSI_PM_OFF = 0.0103 'XXXX unit-specific calibration offset (sn 8530152108)
 'Const TSI_PM_MLT = (1.0 - TSI_PM_OFF)/5000 '0-1.0 mg/m^3, 0-5V
+Const TSI_PM_OFF = 0.008 'XXXX unit-specific calibration offset (sn 8530150710)
+Const TSI_PM_MLT = (1.0 - TSI_PM_OFF)/5000 '0-1.0 mg/m^3, 0-5V
 
 Const DF_LI840A_CO2 = 3
 Const LI840A_CO2_OFF = 0 'ppm
@@ -66,77 +55,38 @@ Units li840a_analog_CO2 = ppm
 Public dusttrak2_analog_pm25
 Units dusttrak2_analog_pm25 = mg/m^3
 
-'record lengths from Table 1, PB100 WeatherStation Technical Manual r1.007
-Public wimda As String * 81+1 
-Public gprmc As String * 74+1
-
-Public wx_bytes
-Public gps_bytes
-
-Public VP, SVP, 'for calcing mean RH
-Public metvals(10)
-' "IMDA," consumed
-'Alias metvals(1) = barometric pressure, inches of mercury
-' ",I," consumed
-Alias metvals(2) = m150wx_P 'barometric pressure, bars
-' ",B," consumed
-Alias metvals(3) = m150wx_T 'air temperature, degrees C
-' ",C,,," consumed (no water temperature or units)
-Alias metvals(4) = m150wx_RH 'relative humidity, %
-' ",," consumed(no absolute humidity)
-Alias metvals(5) = m150wx_DP 'dewpoint, degrees C
-' ",C," consumed
-Alias metvals(6) = m150wx_WD 'degrees E of TN
-' ",T," consumed
-Alias metvals(7) = m150wx_WD_mag 'degrees E of MN
-' ",M," consumed
-'Alias metvals(8) = wind speed, knots
-' ",N," consumed
-Alias metvals(9) = m150wx_WS 'm/s
-' "M*" consumed
-'Alias metvals(10) = checksum
-Units m150wx_P = mbar
-Units m150wx_T = degC
-Units m150wx_RH = %
-Units m150wx_DP = degC
-Units m150wx_WD = degTN
-Units m150wx_WD_mag = degMN
-Units m150wx_WS = m/s
-
-'TODO FIXME: in OS 29, the `GPS` instruction gained ability to perform
-'time-syncing against only NMEA data (no PPS reqd)... but it appears
-'to require the GPGGA sentence. Consider jumpering COM2 to COM1 Rx and
-'acquiring GPS data more neatly and also get time updates. May conflict 
-'with `NetworkTimeProtocol`?
-
-Public gpsstrs(13) As String * 16
-' "PRMC" consumed
-'Alias gpsstrs(1) = UTC in hhmmss.ss format
-'Alias gpsstrs(2) = "A" or "V"
-Alias gpsstrs(3) = strLatitude 'HHMM.MMMM
-'Alias gpsstrs(4) = "N" or "S"
-Alias gpsstrs(5) = strLongitude 'HHMM.MMMM
-'Alias gpsstrs(6) = "E" or "W"
-Alias gpsstrs(7) = strSOG 'knots
-Alias gpsstrs(8) = strCOG 'degrees E of TN
-Alias gpsstrs(9) = strDate 'DDMMYY
-Alias gpsstrs(10) = strMagVar 'degrees E/W
-Alias gpsstrs(11) = strMagVarSign ' "E" or "W"
-Alias gpsstrs(12) = strMode ' {A, D, E, M, S, N}
-Alias gpsstrs(13) = strChecksum
-
-Public gpsvals(5)
-Alias gpsvals(1) = latitude_deg
-Alias gpsvals(2) = latitude_min
-Alias gpsvals(3) = longitude_deg
-Alias gpsvals(4) = longitude_min
-Alias gpsvals(5) = mag_variation
-Public gps_mode As String * 1
-Units latitude_deg = degreesN
-Units latitude_min = minutesN
-Units longitude_deg = degreesE
-Units longitude_min = minutesE
-Units mag_variation = degEofTN
+Dim nmea_sentence(2) As String * 90
+Public gps_data(15)
+Alias gps_data(1) = latitude_deg              'Degrees latitude (+ = East; - = West)
+Alias gps_data(2) = latitude_min              'Minutes latitude
+Alias gps_data(3) = longitude_deg             'Degress longitude (+ = East; - = West)
+Alias gps_data(4) = longitude_min             'Minutes longitude
+Alias gps_data(5) = speed                   'Speed
+Alias gps_data(6) = course                  'Course over ground
+Alias gps_data(7) = mag_variation      'Magnetic variation from true north (+ = East; - = West)
+Alias gps_data(8) = fix_quality             'GPS fix quality: 0 = invalid, 1 = GPS, 2 = 'differential GPS, 6 = estimated
+Alias gps_data(9) = nmbr_satellites         'Number of satellites used for fix
+Alias gps_data(10) = altitude               'Antenna altitude
+Alias gps_data(11) = pps                    'Elapsed ms since last pulse per second (PPS) from GPS
+Alias gps_data(12) = dt_since_gprmc         'Time since last GPRMC string, normally less than '1 second
+Alias gps_data(13) = gps_ready              'Counts from 0 to 10, 10 = ready
+Alias gps_data(14) = max_clock_change       'Maximum value the clock was changed
+Alias gps_data(15) = nmbr_clock_change      'Number of times the clock was changed
+Units latitude_min = degreesN
+Units latitude_deg = minutesN
+Units longitude_min = degreesE
+Units longitude_deg = minutesE
+Units speed = m/s
+Units course = degreesEofN
+Units mag_variation = degreesEofN
+Units fix_quality = unitless
+Units nmbr_satellites = unitless
+Units altitude = m
+Units pps = ms
+Units dt_since_gprmc = s
+Units gps_ready = unitless
+Units max_clock_change = ms
+Units nmbr_clock_change = occurrences
 
 
 DataTable(tsdata,True,-1)
@@ -145,18 +95,6 @@ DataTable(tsdata,True,-1)
   Sample(1,dusttrak2_analog_pm25,FP2)
   Sample(1,li840a_CO2,IEEE4)
   Sample(1,li840a_H2O,IEEE4)
-  Sample(1,m150wx_P,IEEE4)
-  Sample(1,m150wx_T,FP2)
-  Sample(1,m150wx_RH,FP2)
-  Sample(1,m150wx_DP,FP2)
-  Sample(1,m150wx_WS,FP2)
-  Sample(1,m150wx_WD,FP2)
-  Sample(1,latitude_deg,FP2)
-  Sample(1,latitude_min,IEEE4)
-  Sample(1,longitude_deg,FP2)
-  Sample(1,longitude_min,IEEE4)
-  Sample(1,mag_variation,FP2)
-  Sample(1,gps_mode,String)
   Sample(1,li840a_analog_CO2,IEEE4)
 EndTable
 
@@ -170,28 +108,27 @@ DataTable(minutely,True,-1)
   Average(1,li840a_cell_P,IEEE4,li840a_cell_P=NAN)
   Average(1,li840a_dewpoint,IEEE4,li840a_dewpoint=NAN)
   Average(1,li840a_pwr_src,IEEE4,li840a_pwr_src=NAN)
-  Average(1,m150wx_P,IEEE4,m150wx_P=NAN)
-  Average(1,m150wx_T,FP2,m150wx_T=NAN)
-  Average(1,m150wx_RH,FP2,m150wx_RH=NAN)
-  Average(1,m150wx_WS,FP2,m150wx_WS=NAN)
-  Median(1,m150wx_WD,60,FP2,m150wx_WD=NAN)
+  Average(1,latitude_deg,FP2,latitude_deg=NAN)
+  Average(1,latitude_min,IEEE4,latitude_min=NAN)
+  Average(1,longitude_deg,FP2,longitude_deg=NAN)
+  Average(1,longitude_min,IEEE4,longitude_min=NAN)
+  Median(1,mag_variation,60,FP2,mag_variation=NAN)
+  Minimum(1,gps_ready,FP2,gps_ready=NAN,0)
 EndTable
 
 
 '===========================================================================
 BeginProg
-  SetStatus("StationName", "tracer-mobile")
-  SerialOpen(WX_COM,WX_BAUD,WX_FMT,0,WX_BUFF)
-  Move(metvals(1),10,NAN,1)
+  SetStatus("StationName", "tracer-stationary")
   li840a_config = ("<li840><cfg><outrate>1</outrate></cfg><rs232><co2>true</co2>" & _
         "<co2abs>false</co2abs><h2o>true</h2o><h2odewpoint>true</h2odewpoint>" & _
         "<h2oabs>false</h2oabs><celltemp>true</celltemp><cellpres>true</cellpres>" & _
-        "<ivolt>true</ivolt><raw>false</raw><strip>true</strip></rs232></li840>")
+        "<ivolt>true</ivolt><raw>false</raw><strip>true</strip></rs232></li840>" & CHR(10))
   li840a_resp = ("<li840><ack>true</ack></li840>")
   SerialOpen(LI840A_COM,LI840A_BAUD,LI840A_FMT,0,LI840A_BUFF)
-  SerialOut(LI840A_COM,li840a_config,li840a_resp,3,1)
+  SerialOut(LI840A_COM,li840a_config,li840a_resp,10000,100)
 
-	Scan (1,Sec,0,0)
+	Scan(1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm25,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
     VoltDiff(li840a_analog_CO2,1,mv5000,DF_LI840A_CO2,True,0,250,LI840A_CO2_MLT,LI840A_CO2_OFF)
 
@@ -202,51 +139,13 @@ BeginProg
       Move(li840a(1),6,NAN,1)
     EndIf
 	  
-    SerialInRecord(WX_COM,wimda,DOLLAR_W,0,CRLF,wx_bytes,110)
-    SerialInRecord(WX_COM,gprmc,DOLLAR_G,0,CRLF,gps_bytes,110)
-
-    If (Len(wimda)) Then
-      SplitStr(metvals(1),wimda,"",10,0)
-      m150wx_P *= 1000 'bar --> mbar
-      VaporPressure(VP,m150wx_T,m150wx_RH)
-      SatVP(SVP,m150wx_T)
-    Else
-      Move(metvals(1),10,NAN,1)
-      VP = NAN
-      SVP = NAN
-    EndIf
-    
-    If (Len(gprmc)) Then
-      'HINT cursory tests show numeric parser is faster than character-based
-      'but unfortunately GPS data must be parsed as strings and therefore
-      'require character-based
-      SplitStr(gpsstrs(1),gprmc,",*",13,6)
-      If (strLatitude="E" OR strLatitude="W") Then
-        'waiting for signal lock
-        Move(gpsvals(1),5,NAN,1)
-        gps_mode = gpsstrs(4)
-      Else
-        latitude_deg = Left(strLatitude,2) 'str->int
-        latitude_min = Right(strLatitude,7)
-        longitude_deg = Left(strLongitude,3)
-        longitude_min = Right(strLongitude,7)
-        mag_variation = strMagVar
-        'HINT follow TN = MN + MV convention so E=(+), W=(-)
-        mag_variation *= IIF(StrComp(strMagVarSign, "W"), 1, -1)
-        gps_mode = strMode
-      EndIf
-    Else
-      Move(gpsvals(1),3,NAN,1)
-      gps_mode = ""
-    EndIf
-
     CallTable(tsdata)    
     CallTable(minutely)
 	NextScan
 
   SlowSequence
-  Scan(5,min,1,0)
-    ntp_offset = NetworkTimeProtocol(NTP_SERVER,UTC_OFFSET*3600,MAX_CLOCK_DRIFT)
+  Scan(1,Min,0,0)
+    GPS (latitude_deg,GPS_COM_ADDR,UTC_OFFSET*3600,0,nmea_sentence(1))
   NextScan
 EndProg
 
