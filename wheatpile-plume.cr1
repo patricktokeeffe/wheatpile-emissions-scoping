@@ -12,13 +12,13 @@
 
 Const DAYS_OF_DATA = 7
 
-Const LI840A_COM = Com1
+Const LI840A_COM = Com1 'C1/C2
 Const LI840A_BAUD = 9600
 Const LI840A_FMT = 3 '8/n/1, RS232 logic
 Const LI840A_REC = 120
 Const LI840A_BUFF = LI840A_REC*2 + 1
 
-Const WX_COM = Com2   'C1/C2
+Const WX_COM = Com2   'C3/C4
 Const WX_BAUD = 4800
 Const WX_FMT = 3 '8/n/1, RS232
 Const WX_BUFF = 250
