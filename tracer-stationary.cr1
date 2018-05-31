@@ -13,8 +13,15 @@
 Const UTC_OFFSET = -7 'Pacific Daylight Time
 Const DAYS_OF_DATA = 7
 
-'-----------------------------------------------------------------------
+'HINT edit this value using the Public table!
+Public csat3b_azimuth = 0 'direction sonic array is pointing wrt True North
+Units csat3b_azimuth = degreesEofN
+
+
+'---------- NO USER SERVICEABLE PARTS BELOW THIS LINE ;) -----------------
 Const CSAT_SDM_ADDR = 3
+Const DperR = 180/3.14159 'unit conversion
+Const CSAT_VAZ = 90 'sensor-specific geometry indicator
 
 Const LI840A_COM = Com4
 Const LI840A_BAUD = 9600
@@ -43,7 +50,7 @@ Alias CSATvals(4) = csat3b_sonicTemp
 Alias CSATvals(5) = csat3b_diag
 Units CSATvals = m/s
 Units csat3b_sonicTemp = degC
-Units csat3b_diag = bitflag
+Units csat3b_diag = arb
 
 Public CSATmeta(4)
 Alias CSATmeta(1) = csat3b_boardTemp
@@ -111,6 +118,24 @@ Units gps_ready = unitless
 Units max_clock_change = ms
 Units nmbr_clock_change = occurrences
 
+Public instant_WS, instant_WD
+Units instant_WS = m/s
+Units instant_WD = degreesEofN
+Public work_out(4)
+Alias work_out(1) = wnd_spd
+Alias work_out(2) = rslt_wnd_spd
+Alias work_out(3) = rslt_wnd_dir
+Alias work_out(4) = std_wnd_dir
+Units wnd_spd = m/s
+Units rslt_wnd_spd = m/s
+Units rslt_wnd_dir = degreesEofN
+Units std_wnd_dir = degrees
+
+DataTable(work,True,1)
+  TableHide
+  DataInterval(0,1,Min,1)
+  WindVector(1,-1*csat3b_Uy,csat3b_Ux,FP2,csat3b_diag,0,1,2)
+EndTable
 
 DataTable(tsfast,True,-1)
   DataInterval(0,100,mSec,10)
@@ -147,6 +172,8 @@ DataTable(minutely,True,-1)
   Average(1,csat3b_boardHumidity,FP2,csat3b_boardHumidity=NAN)
   Average(1,csat3b_inclinePitch,FP2,csat3b_inclinePitch=NAN)
   Average(1,csat3b_inclineRoll,FP2,csat3b_inclineRoll=NAN)
+  Sample(1,csat3b_azimuth,FP2)
+  Sample(1,work_out(1),IEEE4)
 EndTable
 
 
@@ -164,6 +191,11 @@ BeginProg
   Scan(100,mSec,0,0)
     CSAT3B(CSATvals(1),0,CSAT_SDM_ADDR,0)
     CallTable(tsfast)
+    CallTable(work)
+    If (work.Output(1,1) ) Then
+      GetRecord(work_out(1),work,1)
+      rslt_wnd_dir = (360 + rslt_wnd_dir + csat3b_azimuth) MOD 360
+    EndIf
   NextScan
 
   SlowSequence
@@ -177,7 +209,11 @@ BeginProg
     Else
       Move(li840a(1),6,NAN,1)
     EndIf
-	  
+
+    instant_WS = SQR(csat3b_Ux*csat3b_Ux + csat3b_Uy*csat3b_Uy)
+    instant_WD = INT(ATN2(-1*csat3b_Ux,-1*csat3b_Uy)*DperR + CSAT_VAZ + _
+                     csat3b_azimuth + 360) MOD 360  
+
     CallTable(tsdata)    
     CallTable(minutely)
 	NextScan
