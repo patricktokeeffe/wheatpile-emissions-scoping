@@ -19,7 +19,7 @@ Const LI840A_FMT = 3 '8/n/1, RS232 logic
 Const LI840A_REC = 120
 Const LI840A_BUFF = LI840A_REC*2 + 1
 
-Const GPS_COM_ADDR    = Com4  'GPS serial input port #
+Const GPS_COM_ADDR    = Com3  'GPS serial input port #
 
 Const DF_TSI_PM = 1
 'Const TSI_PM_OFF = 0.0103 'XXXX unit-specific calibration offset (sn 8530152108)
@@ -123,10 +123,10 @@ BeginProg
   li840a_config = ("<li840><cfg><outrate>1</outrate></cfg><rs232><co2>true</co2>" & _
         "<co2abs>false</co2abs><h2o>true</h2o><h2odewpoint>true</h2odewpoint>" & _
         "<h2oabs>false</h2oabs><celltemp>true</celltemp><cellpres>true</cellpres>" & _
-        "<ivolt>true</ivolt><raw>false</raw><strip>true</strip></rs232></li840>" & CHR(10))
+        "<ivolt>true</ivolt><raw>false</raw><strip>true</strip></rs232></li840>")
   li840a_resp = ("<li840><ack>true</ack></li840>")
   SerialOpen(LI840A_COM,LI840A_BAUD,LI840A_FMT,0,LI840A_BUFF)
-  SerialOut(LI840A_COM,li840a_config,li840a_resp,10000,100)
+  SerialOut(LI840A_COM,li840a_config,li840a_resp,3,1)
 
 	Scan(1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm25,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
