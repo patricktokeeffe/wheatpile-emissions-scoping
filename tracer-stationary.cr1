@@ -13,6 +13,9 @@
 Const UTC_OFFSET = -7 'Pacific Daylight Time
 Const DAYS_OF_DATA = 7
 
+'-----------------------------------------------------------------------
+Const CSAT_SDM_ADDR = 3
+
 Const LI840A_COM = Com4
 Const LI840A_BAUD = 9600
 Const LI840A_FMT = 3 '8/n/1, RS232 logic
@@ -31,6 +34,26 @@ Const DF_LI840A_CO2 = 3
 Const LI840A_CO2_OFF = 0 'ppm
 Const LI840A_CO2_MLT = (2500 - LI840A_CO2_OFF)/5000 '0-5000ppm, 0-5V
 
+
+Public CSATvals(5)
+Alias CSATvals(1) = csat3b_Ux
+Alias CSATvals(2) = csat3b_Uy
+Alias CSATvals(3) = csat3b_Uz
+Alias CSATvals(4) = csat3b_sonicTemp
+Alias CSATvals(5) = csat3b_diag
+Units CSATvals = m/s
+Units csat3b_sonicTemp = degC
+Units csat3b_diag = bitflag
+
+Public CSATmeta(4)
+Alias CSATmeta(1) = csat3b_boardTemp
+Alias CSATmeta(2) = csat3b_boardHumidity
+Alias CSATmeta(3) = csat3b_inclinePitch
+Alias CSATmeta(4) = csat3b_inclineRoll
+Units csat3b_boardTemp = degC
+Units csat3b_boardHumidity = %
+Units csat3b_inclinePitch = degrees
+Units csat3b_inclineRoll = degrees
 
 Public li840a_config As String * 300
 Public li840a_resp As String * 32
@@ -89,6 +112,12 @@ Units max_clock_change = ms
 Units nmbr_clock_change = occurrences
 
 
+DataTable(tsfast,True,-1)
+  DataInterval(0,100,mSec,10)
+  CardOut(0,84600*10*DAYS_OF_DATA)
+  Sample(5,CSATvals(1),IEEE4)
+EndTable
+
 DataTable(tsdata,True,-1)
   DataInterval(0,1,Sec,5)
   CardOut(0,86400*DAYS_OF_DATA)
@@ -114,6 +143,10 @@ DataTable(minutely,True,-1)
   Average(1,longitude_min,IEEE4,longitude_min=NAN)
   Median(1,mag_variation,60,FP2,mag_variation=NAN)
   Minimum(1,gps_ready,FP2,gps_ready=NAN,0)
+  Average(1,csat3b_boardTemp,FP2,csat3b_boardTemp=NAN)
+  Average(1,csat3b_boardHumidity,FP2,csat3b_boardHumidity=NAN)
+  Average(1,csat3b_inclinePitch,FP2,csat3b_inclinePitch=NAN)
+  Average(1,csat3b_inclineRoll,FP2,csat3b_inclineRoll=NAN)
 EndTable
 
 
@@ -128,6 +161,12 @@ BeginProg
   SerialOpen(LI840A_COM,LI840A_BAUD,LI840A_FMT,0,LI840A_BUFF)
   SerialOut(LI840A_COM,li840a_config,li840a_resp,3,1)
 
+  Scan(100,mSec,0,0)
+    CSAT3B(CSATvals(1),0,CSAT_SDM_ADDR,0)
+    CallTable(tsfast)
+  NextScan
+
+  SlowSequence
 	Scan(1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm25,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
     VoltDiff(li840a_analog_CO2,1,mv5000,DF_LI840A_CO2,True,0,250,LI840A_CO2_MLT,LI840A_CO2_OFF)
@@ -146,6 +185,7 @@ BeginProg
   SlowSequence
   Scan(1,Min,0,0)
     GPS (latitude_deg,GPS_COM_ADDR,UTC_OFFSET*3600,0,nmea_sentence(1))
+    CSAT3BMonitor(CSATmeta(1),0,CSAT_SDM_ADDR)
   NextScan
 EndProg
 
