@@ -141,39 +141,70 @@ DataTable(tsfast,True,-1)
   DataInterval(0,100,mSec,10)
   CardOut(0,84600*10*DAYS_OF_DATA)
   Sample(5,CSATvals(1),IEEE4)
+    FieldNames("csat3b_Ux:wind vector streamwise component, into array," & _
+               "csat3b_Uy:wind vector horizontal crosswise component," & _
+               "csat3b_Uz:wind vector vertical component," & _
+               "csat3b_sonicTemp:ultrasonic (virtual) temperature," & _
+               "csat3b_diag:sensor diagnostic word")
 EndTable
 
 DataTable(tsdata,True,-1)
   DataInterval(0,1,Sec,5)
   CardOut(0,86400*DAYS_OF_DATA)
   Sample(1,dusttrak2_analog_pm,FP2)
+    FieldNames("dusttrak2_analog_pm:aerosol concentration")
   Sample(1,li840a_CO2,IEEE4)
+    FieldNames("li840a_CO2:CO2 mixing ratio")
   Sample(1,li840a_H2O,IEEE4)
+    FieldNames("li840a_H2O:H2O mixing ratio")
   Sample(1,li840a_analog_CO2,IEEE4)
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
 EndTable
 
 DataTable(minutely,True,-1)
   DataInterval(0,1,Min,1)
   CardOut(0,1440*DAYS_OF_DATA)
   Sample(1,dusttrak2_analog_pm,FP2)
+    FieldNames("dusttrak2_analog_pm:aerosol concentration")
   Average(1,li840a_CO2,IEEE4,li840a_CO2=NAN)
+    FieldNames("li840a_CO2:CO2 mixing ratio")
   Average(1,li840a_H2O,IEEE4,li840a_H2O=NAN)
+    FieldNames("li840a_H2O:H2O mixing ratio")
   Average(1,li840a_cell_T,IEEE4,li840a_cell_T=NAN)
+    FieldNames("li840a_cell_T:sample cell temperature")
   Average(1,li840a_cell_P,IEEE4,li840a_cell_P=NAN)
+    FieldNames("li840a_cell_P:sample cell pressure")
   Average(1,li840a_dewpoint,IEEE4,li840a_dewpoint=NAN)
+    FieldNames("li840a_dewpoint:H2O dewpoint")
   Average(1,li840a_pwr_src,IEEE4,li840a_pwr_src=NAN)
+    FieldNames("li840a_pwr_src:power input")
   Average(1,latitude_deg,FP2,latitude_deg=NAN)
+    FieldNames("latitude_deg:position latitude degrees component")
   Average(1,latitude_min,IEEE4,latitude_min=NAN)
+    FieldNames("latitude_min:position latitude decimal minutes component")
   Average(1,longitude_deg,FP2,longitude_deg=NAN)
+    FieldNames("longitude_deg:position longitude degrees component")
   Average(1,longitude_min,IEEE4,longitude_min=NAN)
+    FieldNames("longitude_min:position longitude decimal minutes component")
   Median(1,mag_variation,60,FP2,mag_variation=NAN)
+    FieldNames("mag_variation:position magnetic variation")
   Minimum(1,gps_ready,FP2,gps_ready=NAN,0)
+    FieldNames("gps_ready:status indicator (10=ready)")
   Average(1,csat3b_boardTemp,FP2,csat3b_boardTemp=NAN)
+    FieldNames("csat3b_boardTemp:sonic internal temperature")
   Average(1,csat3b_boardHumidity,FP2,csat3b_boardHumidity=NAN)
+    FieldNames("csat3b_boardHumidity:sonic internal humidity")
   Average(1,csat3b_inclinePitch,FP2,csat3b_inclinePitch=NAN)
+    FieldNames("csat3b_inclinePitch:sonic pitch incline angle")
   Average(1,csat3b_inclineRoll,FP2,csat3b_inclineRoll=NAN)
+    FieldNames("csat3b_inclineRoll:sonic roll incline angle")
   Sample(1,csat3b_azimuth,FP2)
+    FieldNames("csat3b_azimuth:sonic orientation wrt north")
   Sample(1,work_out(1),IEEE4)
+    FieldNames("wnd_spd:mean horizontal wind speed," & _
+               "rslt_wnd_spd:mean wind vector magnitude," & _
+               "rslt_wnd_dir:resultant mean wind direction," & _
+               "std_wnd_dir:wind direction stdev per CSI algorithm")
 EndTable
 
 
