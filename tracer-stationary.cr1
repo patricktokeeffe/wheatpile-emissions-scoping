@@ -10,15 +10,19 @@
 ' Laboratory for Atmospheric Research at Washington State University
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Const UTC_OFFSET = -7 'Pacific Daylight Time
-Const DAYS_OF_DATA = 7
+ConstTable
+  Const UTC_OFFSET = -7 'Pacific Daylight Time
+  Const DAYS_OF_DATA = 1
+EndConstTable
 
-'HINT edit this value using the Public table!
+'HINT edit this value using the Public table or keyboard display!
 Public csat3b_azimuth = 0 'direction sonic array is pointing wrt True North
 Units csat3b_azimuth = degreesEofN
 
 
 '---------- NO USER SERVICEABLE PARTS BELOW THIS LINE ;) -----------------
+Public debug_on As Boolean = True
+
 Const CSAT_SDM_ADDR = 3
 Const DperR = 180/3.14159 'unit conversion
 Const CSAT_VAZ = 90 'sensor-specific geometry indicator
@@ -42,7 +46,7 @@ Const LI840A_CO2_OFF = 0 'ppm
 Const LI840A_CO2_MLT = (2500 - LI840A_CO2_OFF)/5000 '0-5000ppm, 0-5V
 
 
-Public CSATvals(5)
+Dim CSATvals(5)
 Alias CSATvals(1) = csat3b_Ux
 Alias CSATvals(2) = csat3b_Uy
 Alias CSATvals(3) = csat3b_Uz
@@ -52,7 +56,7 @@ Units CSATvals = m/s
 Units csat3b_sonicTemp = degC
 Units csat3b_diag = arb
 
-Public CSATmeta(4)
+Dim CSATmeta(4)
 Alias CSATmeta(1) = csat3b_boardTemp
 Alias CSATmeta(2) = csat3b_boardHumidity
 Alias CSATmeta(3) = csat3b_inclinePitch
@@ -62,10 +66,10 @@ Units csat3b_boardHumidity = %
 Units csat3b_inclinePitch = degrees
 Units csat3b_inclineRoll = degrees
 
-Public li840a_config As String * 300
-Public li840a_resp As String * 32
-Public li840a_record As String * LI840A_REC
-Public li840a(6)
+Dim li840a_config As String * 300
+Dim li840a_resp As String * 32
+Dim li840a_record As String * LI840A_REC
+Dim li840a(6)
 Alias li840a(1) = li840a_cell_T
 Alias li840a(2) = li840a_cell_P
 Alias li840a(3) = li840a_CO2
@@ -79,14 +83,14 @@ Units li840a_pwr_src = Vdc
 Units li840a_H2O = ppth
 Units li840a_dewpoint = degC
 
-Public li840a_analog_CO2
+Dim li840a_analog_CO2
 Units li840a_analog_CO2 = ppm
 
-Public dusttrak2_analog_pm
+Dim dusttrak2_analog_pm
 Units dusttrak2_analog_pm = mg/m^3
 
 Dim nmea_sentence(2) As String * 90
-Public gps_data(15)
+Dim gps_data(15)
 Alias gps_data(1) = latitude_deg              'Degrees latitude (+ = East; - = West)
 Alias gps_data(2) = latitude_min              'Minutes latitude
 Alias gps_data(3) = longitude_deg             'Degress longitude (+ = East; - = West)
@@ -118,10 +122,10 @@ Units gps_ready = unitless
 Units max_clock_change = ms
 Units nmbr_clock_change = occurrences
 
-Public instant_WS, instant_WD
+Dim instant_WS, instant_WD
 Units instant_WS = m/s
 Units instant_WD = degreesEofN
-Public work_out(4)
+Dim work_out(4)
 Alias work_out(1) = wnd_spd
 Alias work_out(2) = rslt_wnd_spd
 Alias work_out(3) = rslt_wnd_dir
@@ -131,10 +135,24 @@ Units rslt_wnd_spd = m/s
 Units rslt_wnd_dir = degreesEofN
 Units std_wnd_dir = degrees
 
+
 DataTable(work,True,1)
   TableHide
   DataInterval(0,1,Min,1)
   WindVector(1,-1*csat3b_Uy,csat3b_Ux,FP2,csat3b_diag,0,1,2)
+EndTable
+
+DataTable(debug_,debug_on,1)
+  Sample(1,instant_WS,IEEE4)
+  Sample(1,instant_WD,IEEE4)
+  'see the `tsfast` table for real-time 10hz data
+  Sample(4,CSATmeta(1),IEEE4)
+  Sample(1,li840a_record,String)
+  Sample(6,li840a(1),IEEE4)
+  Sample(1,li840a_analog_CO2,IEEE4)
+  Sample(1,dusttrak2_analog_pm,IEEE4)
+  Sample(2,nmea_sentence(1),String)
+  Sample(15,gps_data(1),IEEE4)
 EndTable
 
 DataTable(tsfast,True,-1)
@@ -208,9 +226,17 @@ DataTable(minutely,True,-1)
 EndTable
 
 
+DisplayMenu("Release site", -2)
+  MenuItem("CSAT azimuth", csat3b_azimuth)
+  DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
+  DisplayValue("CO2, ppm", li840a_CO2)
+  DisplayValue("WS, m/s", instant_WS)
+  DisplayValue("WD, deg", instant_WD)
+EndMenu
+
 '===========================================================================
 BeginProg
-  SetStatus("StationName", "tracer-stationary")
+  SetStatus("StationName", "tracer-stationary") 'disabled by CardOut()
   li840a_config = ("<li840><cfg><outrate>1</outrate></cfg><rs232><co2>true</co2>" & _
         "<co2abs>false</co2abs><h2o>true</h2o><h2odewpoint>true</h2odewpoint>" & _
         "<h2oabs>false</h2oabs><celltemp>true</celltemp><cellpres>true</cellpres>" & _
@@ -245,8 +271,9 @@ BeginProg
     instant_WD = INT(ATN2(-1*csat3b_Ux,-1*csat3b_Uy)*DperR + CSAT_VAZ + _
                      csat3b_azimuth + 360) MOD 360  
 
-    CallTable(tsdata)    
+    CallTable(tsdata)
     CallTable(minutely)
+    CallTable(debug_)
 	NextScan
 
   SlowSequence
