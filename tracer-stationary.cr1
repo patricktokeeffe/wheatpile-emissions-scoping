@@ -141,7 +141,7 @@ DataTable(tsfast,True,-1)
   DataInterval(0,100,mSec,10)
   CardOut(0,84600*10*DAYS_OF_DATA)
   Sample(5,CSATvals(1),IEEE4)
-    FieldNames("csat3b_Ux:wind vector streamwise component, into array," & _
+    FieldNames("csat3b_Ux:wind vector streamwise component (into array)," & _
                "csat3b_Uy:wind vector horizontal crosswise component," & _
                "csat3b_Uz:wind vector vertical component," & _
                "csat3b_sonicTemp:ultrasonic (virtual) temperature," & _
