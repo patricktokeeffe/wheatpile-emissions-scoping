@@ -109,6 +109,8 @@ Primary data product (2/2).
 | li840a_CO2          | ppm    | CO<sub>2</sub> mixing ratio    |
 | li840a_H2O          | ppth   | H<sub>2</sub>O mixing ratio    |
 | li840a_analog_CO2   | ppm    | CO<sub>2</sub> mixing ratio (analog data) |
+| instant_WS          | m/s    | instantaneous horizontal wind speed |
+| instant_WD          | degreesEofN | instantaneous wind direction   |
 
 
 #### Aggregated data: `*.minutely.dat`

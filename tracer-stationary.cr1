@@ -181,6 +181,10 @@ DataTable(tsdata,True,-1)
     FieldNames("li840a_H2O:H2O mixing ratio")
   Sample(1,li840a_analog_CO2,IEEE4)
     FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
+  Sample(1,instant_WS,FP2)
+    FieldNames("instant_WS:instantaneous horizontal wind speed")
+  Sample(1,instant_WD,FP2)
+    FieldNames("instant_WD:instantaneous wind direction")
 EndTable
 
 DataTable(minutely,True,-1)
