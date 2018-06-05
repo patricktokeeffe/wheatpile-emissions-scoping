@@ -10,9 +10,13 @@
 ' Laboratory for Atmospheric Research at Washington State University
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
-Const DAYS_OF_DATA = 7
-Const UTC_OFFSET = -7 'Pacific Daylight Time
+ConstTable
+  Const UTC_OFFSET = -7 'Pacific Daylight Time
+  Const DAYS_OF_DATA = 7
+EndConstTable
 
+
+'-------------- NO USER SERVICEABLE PARTS BELOW THIS LINE ------------
 Const NTP_SERVER = "1.us.pool.ntp.org"
 Const MAX_CLOCK_DRIFT = 500 'ms
 Public ntp_offset
