@@ -215,6 +215,14 @@ DataTable(minutely,True,-1)
 EndTable
 
 
+DisplayMenu("Plume monitoring", -2)
+  DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
+  DisplayValue("CO2, ppm", li840a_CO2)
+  DisplayValue("WS, m/s", m150wx_WS)
+  DisplayValue("WD, deg", m150wx_WD)
+EndMenu
+
+
 '===========================================================================
 BeginProg
   SetStatus("StationName", "tracer-mobile")
