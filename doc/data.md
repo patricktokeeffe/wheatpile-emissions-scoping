@@ -65,10 +65,23 @@ solution to process the 10hz data files.
 
 Data is recorded in Pacific Daylight Time (Z-0700).
 
+| Column prefix | Instrument description   |
+|---------------|--------------------------|
+| csat3b_*      | 3D ultrasonic anemometer ([CSAT3B; Campbell Scientific](https://www.campbellsci.com/csat3b)) |
+| dusttrak2_*   | Fine aerosol (PM<sub>2.5</sub>) monitor ([DustTrak 8530; TSI](http://www.tsi.com/DUSTTRAK-II-Aerosol-Monitor-8530/)) |
+| li840a_*      | Carbon dioxide (CO<sub>2</sub>) analyzer ([LI-840A; LICOR Biosciences](https://www.licor.com/env/products/gas_analysis/LI-840A/)) |
+| gps_*         | GPS receiver ([GPS16X-HVS; Garmin](https://www.campbellsci.com/gps16x-hvs)) |
+| m150wx_*      | Compact weather station (T/RH/DP/P/WS/WD) with integral GPS ([150WX; Airmar Technologies](http://www.airmartechnology.com/productdescription.html?id=155)) |
 
-### Wind data: `*.tsfast.dat`
 
-Primary data product.
+### Stationary (release) site
+
+These files can be identified by the text "`CPU:tracer-stationary.cr1`" in the
+first header line.
+
+#### Turbulence data: `*.tsfast.dat`
+
+Primary data product (1/2).
 
 * Table name: tsfast
 * Record interval: 100 milliseconds
@@ -82,9 +95,9 @@ Primary data product.
 | csat3b_sonicTemp  | degC  | ultrasonic (virtual) temperature             |
 | csat3b_diag       | arb   | sensor diagnostic word                       |
 
-### Trace gas data: `*.tsdata.dat`
+#### Gas & aerosol data: `*.tsdata.dat`
 
-Primary data product.
+Primary data product (2/2).
 
 * Table name: tsdata
 * Record interval: 1 second
@@ -98,23 +111,24 @@ Primary data product.
 | li840a_analog_CO2   | ppm    | CO<sub>2</sub> mixing ratio (analog data) |
 
 
-### Aggregated data: `*.minutely.dat`
+#### Aggregated data: `*.minutely.dat`
 
-Complete data records from all analyzers, on a common time base. 
+Complete data records from all analyzers and the GPS, on a common time base. 
 
 * Table name: minutely
 * Record interval: 1 minute (closed left, labeled right &rarr; 10:25:00-10:25:59 is labeled 10:26:00)
 * Aggregation: either average (Avg), median (Med), minimum (Min) or point-sample
   (Smp) as appropriate (*see 4th header row*)
 
-| Column name          | Units | Description                    |
-|----------------------|-------|--------------------------------|
-| li840a_CO2           | ppm   | CO<sub>2</sub> mixing ratio    |
-| li840a_H2O           | ppth  | H<sub>2</sub>O mixing ratio    |
-| li840a_cell_T        | degC  | sample cell temperature        |
-| li840a_cell_P        | kPa   | sample cell pressure           |
-| li840a_dewpoint      | degC  | H<sub>2</sub>O dewpoint        |
-| li840a_pwr_src       | Vdc   | power input                    |
+| Column name          | Units  | Description                   |
+|----------------------|--------|-------------------------------|
+| dusttrak2_analog_pm  | mg/m^3 | aerosol concentration         |
+| li840a_CO2           | ppm    | CO<sub>2</sub> mixing ratio   |
+| li840a_H2O           | ppth   | H<sub>2</sub>O mixing ratio   |
+| li840a_cell_T        | degC   | sample cell temperature       |
+| li840a_cell_P        | kPa    | sample cell pressure          |
+| li840a_dewpoint      | degC   | H<sub>2</sub>O dewpoint       |
+| li840a_pwr_src       | Vdc    | power input                   |
 | latitude_deg         | degreesN    | position latitude degrees component |
 | latitude_min         | minutesN    | position latitude decimal minutes component |
 | longitude_deg        | degreesE    | position longitude degrees component |
@@ -130,4 +144,68 @@ Complete data records from all analyzers, on a common time base.
 | rslt_wnd_spd         | m/s         | mean wind vector magnitude  |
 | rslt_wnd_dir         | degreesEofN | resultant mean wind direction |
 | std_wnd_dir          | degrees     | wind direction stdev per CSI algorithm |
+| li840a_analog_CO2    | ppm         | CO<sub>2</sub> mixing ratio (analog data) |
+
+
+### Mobile (plume monitoring) site
+
+These files can be identified by the text "`CPU:tracer-mobile.cr1`" in the
+first header line.
+
+#### Gas, aerosol & position data: `*.tsdata.dat`
+
+Primary data product.
+
+* Table name: tsdata
+* Record interval: 1 second
+* Aggregation: none
+
+| Column name          | Units  | Description                    |
+|----------------------|--------|--------------------------------|
+| dusttrak2_analog_pm  | mg/m^3 | aerosol concentration          |
+| li840a_CO2           | ppm    | CO<sub>2</sub> mixing ratio    |
+| li840a_H2O           | ppth   | H<sub>2</sub>O mixing ratio    |
+| m150wx_P             | hPa    | barometric pressure            |
+| m150wx_T             | degC   | ambient temperature            |
+| m150wx_RH            | %      | relative humidity              |
+| m150wx_DP            | degC   | dewpoint                       |
+| m150wx_WS            | m/s    | wind speed                     |
+| m150wx_WD            | degTN  | degrees East of True North     |
+| m150wx_WD_mag        | degMN  | degrees East of Magnetic North |
+| m150wx_latitude_deg  | degreesN | position latitude degrees component  |
+| m150wx_latitude_min  | degreesN | position latitude minutes component  |
+| m150wx_longitude_deg | degreesE | position longitude degrees component |
+| m150wx_longitude_min | degreesE | position longitude minutes component |
+| m150wx_mag_variaton  | degEofTN | position magnetic variation          |
+| m150wx_gps_mode      | -        | status indicator (see manual)        |
+| li840a_analog_CO2    | ppm      | CO<sub>2</sub> mixing ratio (analog data) |
+
+
+#### Aggregated data: `*.minutely.dat`
+
+Complete data records from all analyzers and the GPS, on a common time base. 
+
+* Table name: minutely
+* Record interval: 1 minute (closed left, labeled right &rarr; 10:25:00-10:25:59 is labeled 10:26:00)
+* Aggregation: either average (Avg), median (Med) or point-sample
+  (Smp) as appropriate (*see 4th header row*)
+
+| Column name          | Units | Description                    |
+|----------------------|-------|--------------------------------|
+| dusttrak2_analog_pm  | mg/m^3 | aerosol concentration         |
+| li840a_CO2           | ppm   | CO<sub>2</sub> mixing ratio    |
+| li840a_H2O           | ppth  | H<sub>2</sub>O mixing ratio    |
+| li840a_cell_T        | degC  | sample cell temperature        |
+| li840a_cell_P        | kPa   | sample cell pressure           |
+| li840a_dewpoint      | degC  | H<sub>2</sub>O dewpoint        |
+| li840a_pwr_src       | Vdc   | power input                    |
+| m150wx_P             | hPa    | barometric pressure            |
+| m150wx_T             | degC   | ambient temperature            |
+| m150wx_RH            | %      | relative humidity              |
+| m150wx_DP            | degC   | dewpoint                       |
+| m150wx_WS            | m/s    | wind speed                     |
+| m150wx_WD            | degTN  | degrees East of True North     |
+| m150wx_WD_mag        | degMN  | degrees East of Magnetic North |
+| li840a_analog_CO2    | ppm      | CO<sub>2</sub> mixing ratio (analog data) |
+
 

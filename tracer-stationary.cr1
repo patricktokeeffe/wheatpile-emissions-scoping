@@ -201,15 +201,15 @@ DataTable(minutely,True,-1)
   Average(1,li840a_pwr_src,IEEE4,li840a_pwr_src=NAN)
     FieldNames("li840a_pwr_src:power input")
   Average(1,latitude_deg,FP2,latitude_deg=NAN)
-    FieldNames("latitude_deg:position latitude degrees component")
+    FieldNames("gps_latitude_deg:position latitude degrees component")
   Average(1,latitude_min,IEEE4,latitude_min=NAN)
-    FieldNames("latitude_min:position latitude decimal minutes component")
+    FieldNames("gps_latitude_min:position latitude decimal minutes component")
   Average(1,longitude_deg,FP2,longitude_deg=NAN)
-    FieldNames("longitude_deg:position longitude degrees component")
+    FieldNames("gps_longitude_deg:position longitude degrees component")
   Average(1,longitude_min,IEEE4,longitude_min=NAN)
-    FieldNames("longitude_min:position longitude decimal minutes component")
+    FieldNames("gps_longitude_min:position longitude decimal minutes component")
   Median(1,mag_variation,60,FP2,mag_variation=NAN)
-    FieldNames("mag_variation:position magnetic variation")
+    FieldNames("gps_mag_variation:position magnetic variation")
   Minimum(1,gps_ready,FP2,gps_ready=NAN,0)
     FieldNames("gps_ready:status indicator (10=ready)")
   Average(1,csat3b_boardTemp,FP2,csat3b_boardTemp=NAN)
@@ -223,10 +223,12 @@ DataTable(minutely,True,-1)
   Sample(1,csat3b_azimuth,FP2)
     FieldNames("csat3b_azimuth:sonic orientation wrt north")
   Sample(1,work_out(1),IEEE4)
-    FieldNames("wnd_spd:mean horizontal wind speed," & _
-               "rslt_wnd_spd:mean wind vector magnitude," & _
-               "rslt_wnd_dir:resultant mean wind direction," & _
-               "std_wnd_dir:wind direction stdev per CSI algorithm")
+    FieldNames("csat3b_wnd_spd:mean horizontal wind speed," & _
+               "csat3b_rslt_wnd_spd:mean wind vector magnitude," & _
+               "csat3b_rslt_wnd_dir:resultant mean wind direction," & _
+               "csat3b_std_wnd_dir:wind direction stdev per CSI algorithm")
+  Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
 EndTable
 
 

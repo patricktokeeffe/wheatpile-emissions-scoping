@@ -67,8 +67,8 @@ Units li840a_dewpoint = degC
 Public li840a_analog_CO2
 Units li840a_analog_CO2 = ppm
 
-Public dusttrak2_analog_pm25
-Units dusttrak2_analog_pm25 = mg/m^3
+Public dusttrak2_analog_pm
+Units dusttrak2_analog_pm = mg/m^3
 
 'record lengths from Table 1, PB100 WeatherStation Technical Manual r1.007
 Public wimda As String * 81+1 
@@ -99,7 +99,7 @@ Alias metvals(7) = m150wx_WD_mag 'degrees E of MN
 Alias metvals(9) = m150wx_WS 'm/s
 ' "M*" consumed
 'Alias metvals(10) = checksum
-Units m150wx_P = mbar
+Units m150wx_P = hPa
 Units m150wx_T = degC
 Units m150wx_RH = %
 Units m150wx_DP = degC
@@ -146,39 +146,72 @@ Units mag_variation = degEofTN
 DataTable(tsdata,True,-1)
   DataInterval(0,1,Sec,5)
   CardOut(0,86400*DAYS_OF_DATA)
-  Sample(1,dusttrak2_analog_pm25,FP2)
+  Sample(1,dusttrak2_analog_pm,FP2)
+    FieldNames("dusttrak2_analog_pm:aerosol concentration")
   Sample(1,li840a_CO2,IEEE4)
+    FieldNames("li840a_CO2:CO2 mixing ratio")
   Sample(1,li840a_H2O,IEEE4)
+    FieldNames("li840a_H2O:H2O mixing ratio")
   Sample(1,m150wx_P,IEEE4)
+    FieldNames("m150wx_P:barometric pressure")
   Sample(1,m150wx_T,FP2)
+    FieldNames("m150wx_T:ambient temperature")
   Sample(1,m150wx_RH,FP2)
+    FieldNames("m150wx_RH:relative humidity")
   Sample(1,m150wx_DP,FP2)
+    FieldNames("m150wx_DP:dewpoint")
   Sample(1,m150wx_WS,FP2)
+    FieldNames("m150wx_WS:wind speed")
   Sample(1,m150wx_WD,FP2)
+    FieldNames("m150wx_WD:wind direction (true north)")
+  Sample(1,m150wx_WD_mag,FP2)
+    FieldNames("m150wx_WD_mag:wind direction (magnetic north)")
   Sample(1,latitude_deg,FP2)
+    FieldNames("m150wx_latitude_deg:position latitude degrees component")
   Sample(1,latitude_min,IEEE4)
+    FieldNames("m150wx_latitude_min:position latitude minutes component")
   Sample(1,longitude_deg,FP2)
+    FieldNames("m150wx_longitude_deg:position longitude degrees component")
   Sample(1,longitude_min,IEEE4)
+    FieldNames("m150wx_longitude_min:position longitude minutes component")
   Sample(1,mag_variation,FP2)
+    FieldNames("m150wx_mag_variation:position magnetic variation")
   Sample(1,gps_mode,String)
+    FieldNames("m150wx_gps_mode:status indicator (see manual)")
   Sample(1,li840a_analog_CO2,IEEE4)
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
 EndTable
 
 DataTable(minutely,True,-1)
   DataInterval(0,1,Min,1)
   CardOut(0,1440*DAYS_OF_DATA)
-  Sample(1,dusttrak2_analog_pm25,FP2)
+  Sample(1,dusttrak2_analog_pm,FP2)
   Average(1,li840a_CO2,IEEE4,li840a_CO2=NAN)
+    FieldNames("li840a_CO2:CO2 mixing ratio")
   Average(1,li840a_H2O,IEEE4,li840a_H2O=NAN)
+    FieldNames("li840a_H2O:H2O mixing ratio")
   Average(1,li840a_cell_T,IEEE4,li840a_cell_T=NAN)
+    FieldNames("li840a_cell_T:sample cell temperature")
   Average(1,li840a_cell_P,IEEE4,li840a_cell_P=NAN)
+    FieldNames("li840a_cell_P:sample cell pressure")
   Average(1,li840a_dewpoint,IEEE4,li840a_dewpoint=NAN)
+    FieldNames("li840a_dewpoint:H2O dewpoint")
   Average(1,li840a_pwr_src,IEEE4,li840a_pwr_src=NAN)
+    FieldNames("li840a_pwr_src:power input")
   Average(1,m150wx_P,IEEE4,m150wx_P=NAN)
+    FieldNames("m150wx_P:barometric pressure")
   Average(1,m150wx_T,FP2,m150wx_T=NAN)
+    FieldNames("m150wx_T:ambient temperature")
   Average(1,m150wx_RH,FP2,m150wx_RH=NAN)
+    FieldNames("m150wx_RH:relative humidity")
   Average(1,m150wx_WS,FP2,m150wx_WS=NAN)
+    FieldNames("m150wx_WS:wind speed")
   Median(1,m150wx_WD,60,FP2,m150wx_WD=NAN)
+    FieldNames("m150wx_WD:wind direction (true north)")
+  Median(1,m150wx_WD_mag,60,FP2,m150wx_WD_mag=NAN)
+    FieldNames("m150wx_WD_mag:wind direction (magnetic north)")
+  Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
 EndTable
 
 
@@ -196,7 +229,7 @@ BeginProg
   SerialOut(LI840A_COM,li840a_config,li840a_resp,3,1)
 
 	Scan (1,Sec,0,0)
-	  VoltDiff(dusttrak2_analog_pm25,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
+	  VoltDiff(dusttrak2_analog_pm,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
     VoltDiff(li840a_analog_CO2,1,mv5000,DF_LI840A_CO2,True,0,250,LI840A_CO2_MLT,LI840A_CO2_OFF)
 
     SerialIn(li840a_record,LI840A_COM,50,&h0A,LI840A_BUFF)
