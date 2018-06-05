@@ -16,12 +16,16 @@ ConstTable
 EndConstTable
 
 'HINT edit this value using the Public table or keyboard display!
-Public csat3b_azimuth = 0 'direction sonic array is pointing wrt True North
+Public csat3b_azimuth 'direction sonic array is pointing wrt True North
 Units csat3b_azimuth = degreesEofN
 
 
 '---------- NO USER SERVICEABLE PARTS BELOW THIS LINE ;) -----------------
 Public debug_on As Boolean = True
+
+Const SETTINGS_FILE = "CPU:tracer-stationary.dat"
+Dim filehandle As Long
+Dim old_azimuth
 
 Const CSAT_SDM_ADDR = 3
 Const DperR = 180/3.14159 'unit conversion
@@ -245,6 +249,15 @@ BeginProg
   SerialOpen(LI840A_COM,LI840A_BAUD,LI840A_FMT,0,LI840A_BUFF)
   SerialOut(LI840A_COM,li840a_config,li840a_resp,3,1)
 
+  filehandle = FileOpen(SETTINGS_FILE,"rb",0) 'check for exists
+  FileClose(filehandle)
+  If (filehandle = 0) Then 'not found
+    csat3b_azimuth = 0
+  Else
+    Calfile(csat3b_azimuth,1,SETTINGS_FILE,1) 'read file
+  EndIf
+  old_azimuth = csat3b_azimuth
+
   Scan(100,mSec,0,0)
     CSAT3B(CSATvals(1),0,CSAT_SDM_ADDR,0)
     CallTable(tsfast)
@@ -274,6 +287,11 @@ BeginProg
     CallTable(tsdata)
     CallTable(minutely)
     CallTable(debug_)
+    
+    If (old_azimuth <> csat3b_azimuth) Then
+      Calfile(csat3b_azimuth,1,SETTINGS_FILE,0) 'write to file
+      old_azimuth = csat3b_azimuth
+    EndIf
 	NextScan
 
   SlowSequence
