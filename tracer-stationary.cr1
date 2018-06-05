@@ -12,7 +12,7 @@
 
 ConstTable
   Const UTC_OFFSET = -7 'Pacific Daylight Time
-  Const DAYS_OF_DATA = 1
+  Const DAYS_OF_DATA = 7
 EndConstTable
 
 'HINT edit this value using the Public table or keyboard display!
