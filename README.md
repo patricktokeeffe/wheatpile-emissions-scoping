@@ -79,11 +79,14 @@ CO2 (tracer) point-source release equipment
 * [x] digital flowmeter *one 50SLPM from 415, other 20LPM from IAQ*
 * [x] DustTrak II w/ PM2.5 inlet *unit #1 (s/n 8530150710)*
     * [ ] verify logger program has correct det. scaling from IAQ study
-* [ ] Licor LI-840A CO2/H2O analyzer + pump *unit #2 (s/n HGA-2573)
-    * [ ] validate analog voltage scaling range
-    * [ ] add backup analog measurement CO2 only
+* [x] Licor LI-840A CO2/H2O analyzer + pump *unit #2 (s/n HGA-2573)
+    * [x] validate analog voltage scaling range
+    * [x] add backup analog measurement CO2 only
+* [x] GPS unit (*s/n 1A4171474*)
+    * [x] verify programmed for use with CR1000
 * [ ] Campbellsci datalogger *s/n 50905*
     * [x] check for latest firmware *32.02*
+    * [ ] replace lithium battery (is below 3V)
     * [ ] finish program
 * [ ] extension cord & power strip
 * [x] small Honda generator *bought Honda EU2200 generator*
@@ -135,6 +138,12 @@ to configure the *DAC Output* to 5V range and *DAC 1 Source* to *CO2* (0-2500 pp
 Use [Airmar WeatherCaster](http://www.airmartechnology.com/software-downloads.html)
 to disable all NMEA0183 sentences *except* `WIMDA` and `GPRMC`. Keep the
 default 1Hz (`0:01.00`) interval.
+
+#### GPS16X-HVS
+
+If necessary, use `SNSRXCFG_270.exe` (available upon request from lab tech) to
+configure the GPS receiver as detailed in *Appendix A. Changing GPS16X-HVS
+Settings*.
 
 
 ## References
