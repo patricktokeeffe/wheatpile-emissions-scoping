@@ -1,10 +1,27 @@
-# Data Products
+# Data Product Details
 
-### Wheat pile dust emissions scoping study (spring 2018)
+### Wheatpile Emissions Scoping Study
 
-This document provides guidance for data handling.
+This document provides guidance for data handling; see also [Operating Procedures](sop.md).
 
 ## Data Retrieval
+
+
+### TSI DustTrak
+
+> Refer to the DustTrak user manual [listed here](../README.md#references).
+
+Data files are stored to internal memory and may be retrieved with a USB flash
+memory card via the *Data* submenu. The files are written to a folder with the
+unit's serial number. The labels on each unit are:
+
+| Location                   | DustTrak unit      |
+|----------------------------|--------------------|
+| stationary (release) site  | #1, s/n 8530150710 |
+| mobile (monitoring) site   | #2, s/n 8530152108 |
+
+
+### CR1000 Datalogger
 
 > Refer to the CR1000 user manual [listed here](../README.md#references).
 
@@ -131,21 +148,21 @@ Complete data records from all analyzers and the GPS, on a common time base.
 | li840a_cell_P        | kPa    | sample cell pressure          |
 | li840a_dewpoint      | degC   | H<sub>2</sub>O dewpoint       |
 | li840a_pwr_src       | Vdc    | power input                   |
-| latitude_deg         | degreesN    | position latitude degrees component |
-| latitude_min         | minutesN    | position latitude decimal minutes component |
-| longitude_deg        | degreesE    | position longitude degrees component |
-| longitude_min        | minutesE    | position longitude decimal minutes component |
-| mag_variation        | degreesEofN | position magnetic variation |
+| gps_latitude_deg     | degreesN    | position latitude degrees component |
+| gps_latitude_min     | minutesN    | position latitude decimal minutes component |
+| gps_longitude_deg    | degreesE    | position longitude degrees component |
+| gps_longitude_min    | minutesE    | position longitude decimal minutes component |
+| gps_mag_variation    | degreesEofN | position magnetic variation |
 | gps_ready            | unitless    | status indicator (10=ready) |
 | csat3b_boardTemp     | degC        | sonic internal temperature  |
 | csat3b_boardHumidity | %           | sonic internal humidity     |
 | csat3b_inclinePitch  | degrees     | sonic pitch incline angle   |
 | csat3b_inclineRoll   | degrees     | sonic roll incline angle    |
 | csat3b_azimuth       | degreesEofN | sonic orientation wrt north |
-| wnd_spd              | m/s         | mean horizontal wind speed  |
-| rslt_wnd_spd         | m/s         | mean wind vector magnitude  |
-| rslt_wnd_dir         | degreesEofN | resultant mean wind direction |
-| std_wnd_dir          | degrees     | wind direction stdev per CSI algorithm |
+| csat3b_wnd_spd       | m/s         | mean horizontal wind speed  |
+| csat3b_rslt_wnd_spd  | m/s         | mean wind vector magnitude  |
+| csat3b_rslt_wnd_dir  | degreesEofN | resultant mean wind direction |
+| csat3b_std_wnd_dir   | degrees     | wind direction stdev per CSI algorithm |
 | li840a_analog_CO2    | ppm         | CO<sub>2</sub> mixing ratio (analog data) |
 
 
