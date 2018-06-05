@@ -220,6 +220,8 @@ DisplayMenu("Plume monitoring", -2)
   DisplayValue("CO2, ppm", li840a_CO2)
   DisplayValue("WS, m/s", m150wx_WS)
   DisplayValue("WD, deg", m150wx_WD)
+  DisplayValue("Lat. minute", latitude_min)
+  DisplayValue("Long. minute", longitude_min)
 EndMenu
 
 
