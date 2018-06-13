@@ -27,6 +27,14 @@ component.
 * [Data product details](doc/data.md)
 * [Initial setup notes](doc/setup.md)
 
+## Data stuff
+
+See [here](data/) for:
+
+* Example plume calculations
+* Validation test data & results
+* Analyzer calibration audit data & results
+
 
 ## References
 

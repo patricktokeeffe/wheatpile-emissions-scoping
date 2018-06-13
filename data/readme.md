@@ -10,7 +10,9 @@ concentration differences.
 ### 2018 June 5
 
 Combined CO2/PM tracer release test, Paccar ETB roof top. Collected data has
-not been adjusted for analyzer calibration discrepancies (see 2018-05-06 data).
+not been adjusted for analyzer calibration discrepancies since unit #1 had to 
+be swapped out with a new unit, #3 (it began reporting erratic, unexplainable 
+values).
 
 * [Collected data (.zip)](20180605_roof_test/20180605_roof_test.zip)
 * [Data summary (.xlsx)](20180605_roof_test/20180605_roof_test.xlsx)
@@ -21,7 +23,7 @@ anemometer and gas analyzer were located almost 3 meters from the point
 release source.
 
 ![Students conducting simultaneous aerosol point release; instrumentation
-visible in the background](IMG_20180605_133234.jpg)
+visible in the background](20180605_roof_test/IMG_20180605_133234.jpg)
 
 We were able to observe the plume from ~10 meters (6-7 paces):
 
