@@ -39,6 +39,19 @@ Some additional time-series plots:
 
 ![Time series of wind direction](20180605_roof_test/ts_wd.png)
 
+#### Notes on wind direction
+
+In general, the "mobile suite" compact weather station (Airmar 150WX) produces
+better wind direction data with respect to magnetic north. The electronic
+compass used to output True North-corrected wind direction data is subject to
+local noise and is less reliable than using a current, site-specific, but 
+constant declination value. 
+
+Observe the small noise levels and large outliers in the magnetic declination
+inferred from Airmar 150WX magnetic compass readings:
+
+![Time series of inferred site magnetic declination](file://20180605_roof_test/delta_wd_true_mag.png)
+
 
 ### 2018 May 6-9th
 
