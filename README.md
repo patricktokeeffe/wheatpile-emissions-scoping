@@ -26,6 +26,7 @@ component.
 * [Operating procedures](doc/usage.md)
 * [Data product details](doc/data.md)
 * [Initial setup notes](doc/setup.md)
+* [Version Changelog](doc/changelog.md)
 
 ## Data stuff
 
