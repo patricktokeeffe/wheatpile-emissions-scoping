@@ -4,10 +4,11 @@
 
 | Release date | Version | Stationary logger `ProgSig` | Mobile logger `ProgSig` |
 |--------------|---------|-----------------------------|-------------------------|
-| 2018 June 5  | 0.1     | 44463                       | 40156                   |
+| 2018 June 5  | 0.1     | 44463                       | 40156  |
+| 2018 July 10 | 1.0     | 47848                       | 8408   |
 
 
-## Next release
+## Version 1.0
 
 * Expose GPS position to users on front panel display. Shows minutes component
   of lat/long since degrees expected to remain relatively constant. 
