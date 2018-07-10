@@ -11,7 +11,7 @@
 
 * Expose GPS position to users on front panel display. Shows minutes component
   of lat/long since degrees expected to remain relatively constant. 
-
+* FIX: record all four aggregated wind values for sonic anemometer
 
 
 ## Version 0.1

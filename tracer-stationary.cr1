@@ -226,7 +226,7 @@ DataTable(minutely,True,-1)
     FieldNames("csat3b_inclineRoll:sonic roll incline angle")
   Sample(1,csat3b_azimuth,FP2)
     FieldNames("csat3b_azimuth:sonic orientation wrt north")
-  Sample(1,work_out(1),IEEE4)
+  Sample(4,work_out(1),IEEE4)
     FieldNames("csat3b_wnd_spd:mean horizontal wind speed," & _
                "csat3b_rslt_wnd_spd:mean wind vector magnitude," & _
                "csat3b_rslt_wnd_dir:resultant mean wind direction," & _
