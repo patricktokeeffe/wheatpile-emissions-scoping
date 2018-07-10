@@ -80,7 +80,21 @@ Performance data ([zip archive](20180506_co2_prep/2018-05-06_Licor_comparison.zi
 | mean  |419.0423738 | 412.2458884 |
 | stdev | 10.2546315 | 10.1936601  |
 
-Regression eqn: `y = 0.9876x - 1.6`
+> Regression eqn: `y = 0.9876x - 1.6`
 
 ![Scatterplot of measurements from LI-840A units #1 and #2](20180506_co2_prep/2018_05_10_12_56_46_2018_05_09_Licor_cross_compare.xlsx_Excel.png)
 
+
+### 2018 July 10th
+
+Data collected by sampling CO2 in series through stationary & mobile suites:
+
+![CO2 analyzers sampling in series](20180710_co2_compare/IMG_20180710_103231.jpg)
+
+![Layout diagram](20180710_co2_compare/layout.png)
+
+Performance data was evaluated [with Excel&trade;](20180710_co2_compare/20180710_co2_compare.xlsx):
+
+> Regression eqn: `unit2 = 1.0124*unit3 - 2.1721`
+
+![Scatterplot of measurements from LI-840A units #2 and #3](20180710_co2_compare/xy_co2.png)
