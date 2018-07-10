@@ -229,7 +229,7 @@ DataTable(minutely,True,-1)
                "csat3b_unit_wnd_dir:unit vector mean wind direction," & _
                "csat3b_std_wnd_dir:wind direction stdev (Yamartino algorithm)")
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
-    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
 EndTable
 
 

@@ -211,7 +211,7 @@ DataTable(minutely,True,-1)
   Median(1,m150wx_WD_mag,60,FP2,m150wx_WD_mag=NAN)
     FieldNames("m150wx_WD_mag:wind direction (magnetic north)")
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
-    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
 EndTable
 
 

@@ -14,6 +14,7 @@
 * FIX: record all four aggregated wind values for sonic anemometer. Previously
   only first value (`csat3b_wnd_spd`) was retained in table `minutely`. (Data
   not recorded can be reconstructed from 10Hz anemometer data set.)
+* FIX: add missing closing paren (no impact on program operation)
 
 
 ## Version 0.1
