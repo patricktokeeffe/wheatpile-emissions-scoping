@@ -1,10 +1,27 @@
-# Data Products
+# Data Product Details
 
-### Wheat pile dust emissions scoping study (spring 2018)
+### Wheatpile Emissions Scoping Study
 
-This document provides guidance for data handling.
+This document provides guidance for data handling; see also [Operating Procedures](usage.md).
 
 ## Data Retrieval
+
+
+### TSI DustTrak
+
+> Refer to the DustTrak user manual [listed here](../README.md#references).
+
+Data files are stored to internal memory and may be retrieved with a USB flash
+memory card via the *Data* submenu. The files are written to a folder with the
+unit's serial number. The labels on each unit are:
+
+| Location                   | DustTrak unit      |
+|----------------------------|--------------------|
+| stationary (release) site  | #1, s/n 8530150710 |
+| mobile (monitoring) site   | #2, s/n 8530152108 |
+
+
+### CR1000 Datalogger
 
 > Refer to the CR1000 user manual [listed here](../README.md#references).
 
@@ -121,6 +138,12 @@ Complete data records from all analyzers and the GPS, on a common time base.
 * Record interval: 1 minute (closed left, labeled right &rarr; 10:25:00-10:25:59 is labeled 10:26:00)
 * Aggregation: either average (Avg), median (Med), minimum (Min) or point-sample
   (Smp) as appropriate (*see 4th header row*)
+    * standard deviation of wind direction (`csat3b_std_wnd_dir`) is calculated
+      using the Yamartino algorithm, which complies with EPA guidelines for use
+      with straight-line Gaussian dispersion models to model plume transport
+      (*WindVector, CRBasic Program Reference for CR1000.Std.32. Campbell Scientific Inc.*)
+
+
 
 | Column name          | Units  | Description                   |
 |----------------------|--------|-------------------------------|
@@ -131,22 +154,22 @@ Complete data records from all analyzers and the GPS, on a common time base.
 | li840a_cell_P        | kPa    | sample cell pressure          |
 | li840a_dewpoint      | degC   | H<sub>2</sub>O dewpoint       |
 | li840a_pwr_src       | Vdc    | power input                   |
-| latitude_deg         | degreesN    | position latitude degrees component |
-| latitude_min         | minutesN    | position latitude decimal minutes component |
-| longitude_deg        | degreesE    | position longitude degrees component |
-| longitude_min        | minutesE    | position longitude decimal minutes component |
-| mag_variation        | degreesEofN | position magnetic variation |
+| gps_latitude_deg     | degreesN    | position latitude degrees component |
+| gps_latitude_min     | minutesN    | position latitude decimal minutes component |
+| gps_longitude_deg    | degreesE    | position longitude degrees component |
+| gps_longitude_min    | minutesE    | position longitude decimal minutes component |
+| gps_mag_variation    | degreesEofN | position magnetic variation |
 | gps_ready            | unitless    | status indicator (10=ready) |
 | csat3b_boardTemp     | degC        | sonic internal temperature  |
 | csat3b_boardHumidity | %           | sonic internal humidity     |
 | csat3b_inclinePitch  | degrees     | sonic pitch incline angle   |
 | csat3b_inclineRoll   | degrees     | sonic roll incline angle    |
 | csat3b_azimuth       | degreesEofN | sonic orientation wrt north |
-| wnd_spd              | m/s         | mean horizontal wind speed  |
-| rslt_wnd_spd         | m/s         | mean wind vector magnitude  |
-| rslt_wnd_dir         | degreesEofN | resultant mean wind direction |
-| std_wnd_dir          | degrees     | wind direction stdev per CSI algorithm |
+| csat3b_wnd_spd       | m/s         | mean horizontal wind speed  |
+| csat3b_unit_wnd_dir  | degreesEofN | unit vector mean wind direction |
+| csat3b_std_wnd_dir   | degrees     | wind direction stdev (Yamartino algorithm) |
 | li840a_analog_CO2    | ppm         | CO<sub>2</sub> mixing ratio (analog data) |
+| logger_panel_tmpr    | degC        | logger wiring panel temperature |
 
 
 ### Mobile (plume monitoring) site
@@ -209,5 +232,6 @@ Complete data records from all analyzers and the GPS, on a common time base.
 | m150wx_WD            | degTN  | degrees East of True North     |
 | m150wx_WD_mag        | degMN  | degrees East of Magnetic North |
 | li840a_analog_CO2    | ppm      | CO<sub>2</sub> mixing ratio (analog data) |
+| logger_panel_tmpr    | degC     | logger wiring panel temperature |
 
 

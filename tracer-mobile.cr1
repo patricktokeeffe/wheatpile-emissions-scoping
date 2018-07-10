@@ -142,6 +142,9 @@ Units longitude_deg = degreesE
 Units longitude_min = minutesE
 Units mag_variation = degEofTN
 
+Public panel_tmpr
+Units panel_tmpr = degC
+
 
 DataTable(tsdata,True,-1)
   DataInterval(0,1,Sec,5)
@@ -211,15 +214,20 @@ DataTable(minutely,True,-1)
   Median(1,m150wx_WD_mag,60,FP2,m150wx_WD_mag=NAN)
     FieldNames("m150wx_WD_mag:wind direction (magnetic north)")
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
-    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
+  Average(1,panel_tmpr,FP2,panel_tmpr=NAN)
+    FieldNames("logger_panel_tmpr:logger wiring panel temperature")
 EndTable
 
 
-DisplayMenu("Plume monitoring", -2)
+DisplayMenu("Plume monitoring", -1)
   DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
   DisplayValue("CO2, ppm", li840a_CO2)
   DisplayValue("WS, m/s", m150wx_WS)
   DisplayValue("WD, deg", m150wx_WD)
+  DisplayValue("Lat. minute", latitude_min)
+  DisplayValue("Long. minute", longitude_min)
+  DisplayValue("Logger tmpr", panel_tmpr)
 EndMenu
 
 
@@ -239,7 +247,8 @@ BeginProg
 	Scan (1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
     VoltDiff(li840a_analog_CO2,1,mv5000,DF_LI840A_CO2,True,0,250,LI840A_CO2_MLT,LI840A_CO2_OFF)
-
+    PanelTemp(panel_tmpr, 250)
+    
     SerialIn(li840a_record,LI840A_COM,50,&h0A,LI840A_BUFF)
     If (Len(li840a_record)) Then
       SplitStr(li840a(1),li840a_record,"",6,0)

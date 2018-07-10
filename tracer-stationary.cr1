@@ -129,21 +129,22 @@ Units nmbr_clock_change = occurrences
 Dim instant_WS, instant_WD
 Units instant_WS = m/s
 Units instant_WD = degreesEofN
-Dim work_out(4)
+Dim work_out(3)
 Alias work_out(1) = wnd_spd
-Alias work_out(2) = rslt_wnd_spd
-Alias work_out(3) = rslt_wnd_dir
-Alias work_out(4) = std_wnd_dir
+Alias work_out(2) = unit_wnd_dir
+Alias work_out(3) = std_wnd_dir
 Units wnd_spd = m/s
-Units rslt_wnd_spd = m/s
-Units rslt_wnd_dir = degreesEofN
+Units unit_wnd_dir = degreesEofN
 Units std_wnd_dir = degrees
+
+Dim panel_tmpr
+Units panel_tmpr = degC
 
 
 DataTable(work,True,1)
   TableHide
   DataInterval(0,1,Min,1)
-  WindVector(1,-1*csat3b_Uy,csat3b_Ux,FP2,csat3b_diag,0,1,2)
+  WindVector(1,-1*csat3b_Uy,csat3b_Ux,FP2,csat3b_diag,0,1,0)
 EndTable
 
 DataTable(debug_,debug_on,1)
@@ -157,6 +158,7 @@ DataTable(debug_,debug_on,1)
   Sample(1,dusttrak2_analog_pm,IEEE4)
   Sample(2,nmea_sentence(1),String)
   Sample(15,gps_data(1),IEEE4)
+  Sample(1,panel_tmpr,FP2)
 EndTable
 
 DataTable(tsfast,True,-1)
@@ -226,22 +228,28 @@ DataTable(minutely,True,-1)
     FieldNames("csat3b_inclineRoll:sonic roll incline angle")
   Sample(1,csat3b_azimuth,FP2)
     FieldNames("csat3b_azimuth:sonic orientation wrt north")
-  Sample(1,work_out(1),IEEE4)
+  Sample(3,work_out(1),IEEE4)
     FieldNames("csat3b_wnd_spd:mean horizontal wind speed," & _
-               "csat3b_rslt_wnd_spd:mean wind vector magnitude," & _
-               "csat3b_rslt_wnd_dir:resultant mean wind direction," & _
-               "csat3b_std_wnd_dir:wind direction stdev per CSI algorithm")
+               "csat3b_unit_wnd_dir:unit vector mean wind direction," & _
+               "csat3b_std_wnd_dir:wind direction stdev (Yamartino algorithm)")
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
-    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
+    FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
+  Average(1,panel_tmpr,FP2,panel_tmpr=NAN)
+    FieldNames("logger_panel_tmpr:logger wiring panel temperature")
 EndTable
 
 
-DisplayMenu("Release site", -2)
+DisplayMenu("Release site", -1)
   MenuItem("CSAT azimuth", csat3b_azimuth)
-  DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
-  DisplayValue("CO2, ppm", li840a_CO2)
-  DisplayValue("WS, m/s", instant_WS)
-  DisplayValue("WD, deg", instant_WD)
+  SubMenu("View data")
+    DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
+    DisplayValue("CO2, ppm", li840a_CO2)
+    DisplayValue("WS, m/s", instant_WS)
+    DisplayValue("WD, deg", instant_WD)
+    DisplayValue("Lat. minute", latitude_min)
+    DisplayValue("Long. minute", longitude_min)
+    DisplayValue("Logger tmpr", panel_tmpr)
+  EndSubMenu
 EndMenu
 
 '===========================================================================
@@ -270,7 +278,7 @@ BeginProg
     CallTable(work)
     If (work.Output(1,1) ) Then
       GetRecord(work_out(1),work,1)
-      rslt_wnd_dir = (360 + rslt_wnd_dir + csat3b_azimuth) MOD 360
+      unit_wnd_dir = (360 + unit_wnd_dir + csat3b_azimuth) MOD 360
     EndIf
   NextScan
 
@@ -278,6 +286,7 @@ BeginProg
 	Scan(1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
     VoltDiff(li840a_analog_CO2,1,mv5000,DF_LI840A_CO2,True,0,250,LI840A_CO2_MLT,LI840A_CO2_OFF)
+    PanelTemp(panel_tmpr, 250)
 
     SerialIn(li840a_record,LI840A_COM,50,&h0A,LI840A_BUFF)
     If (Len(li840a_record)) Then
