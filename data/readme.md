@@ -52,7 +52,7 @@ constant declination value.
 Observe the small noise levels and large outliers in the magnetic declination
 inferred from Airmar 150WX magnetic compass readings:
 
-![Time series of inferred site magnetic declination](file://20180605_roof_test/delta_wd_true_mag.png)
+![Time series of inferred site magnetic declination](20180605_roof_test/delta_wd_true_mag.png)
 
 ##### Standard deviation formula choice
 
