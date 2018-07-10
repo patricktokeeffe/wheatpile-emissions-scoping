@@ -15,6 +15,8 @@
   only first value (`csat3b_wnd_spd`) was retained in table `minutely`. (Data
   not recorded can be reconstructed from 10Hz anemometer data set.)
 * FIX: add missing closing paren (no impact on program operation)
+* Track datalogger wiring panel temperature, for quality assurance: adds new
+  column `self_panel_tmpr` to end of 1-min data tables
 
 
 ## Version 0.1

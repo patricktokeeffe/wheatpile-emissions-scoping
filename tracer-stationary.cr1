@@ -137,6 +137,9 @@ Units wnd_spd = m/s
 Units unit_wnd_dir = degreesEofN
 Units std_wnd_dir = degrees
 
+Dim panel_tmpr
+Units panel_tmpr = degC
+
 
 DataTable(work,True,1)
   TableHide
@@ -155,6 +158,7 @@ DataTable(debug_,debug_on,1)
   Sample(1,dusttrak2_analog_pm,IEEE4)
   Sample(2,nmea_sentence(1),String)
   Sample(15,gps_data(1),IEEE4)
+  Sample(1,panel_tmpr,FP2)
 EndTable
 
 DataTable(tsfast,True,-1)
@@ -230,6 +234,8 @@ DataTable(minutely,True,-1)
                "csat3b_std_wnd_dir:wind direction stdev (Yamartino algorithm)")
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
     FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
+  Average(1,panel_tmpr,FP2,panel_tmpr=NAN)
+    FieldNames("self_panel_tmpr:logger wiring panel temperature")
 EndTable
 
 
@@ -241,6 +247,7 @@ DisplayMenu("Release site", -2)
   DisplayValue("WD, deg", instant_WD)
   DisplayValue("Lat. minute", latitude_min)
   DisplayValue("Long. minute", longitude_min)
+  DisplayValue("Logger tmpr", panel_tmpr)
 EndMenu
 
 '===========================================================================
@@ -277,6 +284,7 @@ BeginProg
 	Scan(1,Sec,0,0)
 	  VoltDiff(dusttrak2_analog_pm,1,mv5000,DF_TSI_PM,True,0,250,TSI_PM_MLT,TSI_PM_OFF)
     VoltDiff(li840a_analog_CO2,1,mv5000,DF_LI840A_CO2,True,0,250,LI840A_CO2_MLT,LI840A_CO2_OFF)
+    PanelTemp(panel_tmpr, 250)
 
     SerialIn(li840a_record,LI840A_COM,50,&h0A,LI840A_BUFF)
     If (Len(li840a_record)) Then
