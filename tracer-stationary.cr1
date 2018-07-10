@@ -239,15 +239,17 @@ DataTable(minutely,True,-1)
 EndTable
 
 
-DisplayMenu("Release site", -2)
+DisplayMenu("Release site", -1)
   MenuItem("CSAT azimuth", csat3b_azimuth)
-  DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
-  DisplayValue("CO2, ppm", li840a_CO2)
-  DisplayValue("WS, m/s", instant_WS)
-  DisplayValue("WD, deg", instant_WD)
-  DisplayValue("Lat. minute", latitude_min)
-  DisplayValue("Long. minute", longitude_min)
-  DisplayValue("Logger tmpr", panel_tmpr)
+  SubMenu("View data")
+    DisplayValue("PM, mg/m^3", dusttrak2_analog_pm)
+    DisplayValue("CO2, ppm", li840a_CO2)
+    DisplayValue("WS, m/s", instant_WS)
+    DisplayValue("WD, deg", instant_WD)
+    DisplayValue("Lat. minute", latitude_min)
+    DisplayValue("Long. minute", longitude_min)
+    DisplayValue("Logger tmpr", panel_tmpr)
+  EndSubMenu
 EndMenu
 
 '===========================================================================
