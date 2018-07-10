@@ -2,7 +2,7 @@
 
 ### Wheatpile Emissions Scoping Study
 
-This document provides guidance for data handling; see also [Operating Procedures](sop.md).
+This document provides guidance for data handling; see also [Operating Procedures](usage.md).
 
 ## Data Retrieval
 
@@ -138,6 +138,12 @@ Complete data records from all analyzers and the GPS, on a common time base.
 * Record interval: 1 minute (closed left, labeled right &rarr; 10:25:00-10:25:59 is labeled 10:26:00)
 * Aggregation: either average (Avg), median (Med), minimum (Min) or point-sample
   (Smp) as appropriate (*see 4th header row*)
+    * standard deviation of wind direction (`csat3b_std_wnd_dir`) is calculated
+      using the Yamartino algorithm, which complies with EPA guidelines for use
+      with straight-line Gaussian dispersion models to model plume transport
+      (*WindVector, CRBasic Program Reference for CR1000.Std.32. Campbell Scientific Inc.*)
+
+
 
 | Column name          | Units  | Description                   |
 |----------------------|--------|-------------------------------|
@@ -160,9 +166,8 @@ Complete data records from all analyzers and the GPS, on a common time base.
 | csat3b_inclineRoll   | degrees     | sonic roll incline angle    |
 | csat3b_azimuth       | degreesEofN | sonic orientation wrt north |
 | csat3b_wnd_spd       | m/s         | mean horizontal wind speed  |
-| csat3b_rslt_wnd_spd  | m/s         | mean wind vector magnitude  |
-| csat3b_rslt_wnd_dir  | degreesEofN | resultant mean wind direction |
-| csat3b_std_wnd_dir   | degrees     | wind direction stdev per CSI algorithm |
+| csat3b_unit_wnd_dir  | degreesEofN | unit vector mean wind direction |
+| csat3b_std_wnd_dir   | degrees     | wind direction stdev (Yamartino algorithm) |
 | li840a_analog_CO2    | ppm         | CO<sub>2</sub> mixing ratio (analog data) |
 
 

@@ -11,7 +11,9 @@
 
 * Expose GPS position to users on front panel display. Shows minutes component
   of lat/long since degrees expected to remain relatively constant. 
-* FIX: record all four aggregated wind values for sonic anemometer
+* FIX: record all four aggregated wind values for sonic anemometer. Previously
+  only first value (`csat3b_wnd_spd`) was retained in table `minutely`. (Data
+  not recorded can be reconstructed from 10Hz anemometer data set.)
 
 
 ## Version 0.1

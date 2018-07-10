@@ -129,21 +129,19 @@ Units nmbr_clock_change = occurrences
 Dim instant_WS, instant_WD
 Units instant_WS = m/s
 Units instant_WD = degreesEofN
-Dim work_out(4)
+Dim work_out(3)
 Alias work_out(1) = wnd_spd
-Alias work_out(2) = rslt_wnd_spd
-Alias work_out(3) = rslt_wnd_dir
-Alias work_out(4) = std_wnd_dir
+Alias work_out(2) = unit_wnd_dir
+Alias work_out(3) = std_wnd_dir
 Units wnd_spd = m/s
-Units rslt_wnd_spd = m/s
-Units rslt_wnd_dir = degreesEofN
+Units unit_wnd_dir = degreesEofN
 Units std_wnd_dir = degrees
 
 
 DataTable(work,True,1)
   TableHide
   DataInterval(0,1,Min,1)
-  WindVector(1,-1*csat3b_Uy,csat3b_Ux,FP2,csat3b_diag,0,1,2)
+  WindVector(1,-1*csat3b_Uy,csat3b_Ux,FP2,csat3b_diag,0,1,0)
 EndTable
 
 DataTable(debug_,debug_on,1)
@@ -226,11 +224,10 @@ DataTable(minutely,True,-1)
     FieldNames("csat3b_inclineRoll:sonic roll incline angle")
   Sample(1,csat3b_azimuth,FP2)
     FieldNames("csat3b_azimuth:sonic orientation wrt north")
-  Sample(4,work_out(1),IEEE4)
+  Sample(3,work_out(1),IEEE4)
     FieldNames("csat3b_wnd_spd:mean horizontal wind speed," & _
-               "csat3b_rslt_wnd_spd:mean wind vector magnitude," & _
-               "csat3b_rslt_wnd_dir:resultant mean wind direction," & _
-               "csat3b_std_wnd_dir:wind direction stdev per CSI algorithm")
+               "csat3b_unit_wnd_dir:unit vector mean wind direction," & _
+               "csat3b_std_wnd_dir:wind direction stdev (Yamartino algorithm)")
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
     FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)"
 EndTable
@@ -272,7 +269,7 @@ BeginProg
     CallTable(work)
     If (work.Output(1,1) ) Then
       GetRecord(work_out(1),work,1)
-      rslt_wnd_dir = (360 + rslt_wnd_dir + csat3b_azimuth) MOD 360
+      unit_wnd_dir = (360 + unit_wnd_dir + csat3b_azimuth) MOD 360
     EndIf
   NextScan
 

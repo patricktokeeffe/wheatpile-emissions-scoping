@@ -41,6 +41,8 @@ Some additional time-series plots:
 
 #### Notes on wind direction
 
+##### Airmar compass declination
+
 In general, the "mobile suite" compact weather station (Airmar 150WX) produces
 better wind direction data with respect to magnetic north. The electronic
 compass used to output True North-corrected wind direction data is subject to
@@ -51,6 +53,18 @@ Observe the small noise levels and large outliers in the magnetic declination
 inferred from Airmar 150WX magnetic compass readings:
 
 ![Time series of inferred site magnetic declination](file://20180605_roof_test/delta_wd_true_mag.png)
+
+##### Standard deviation formula choice
+
+These data were collected using the Campbell Scientific proprietary wind speed
+weighted algorithm to calculate standard deviation of wind direction. This is
+in contrast to the Yamartino algorithm, which is the EPA-compliant choice for
+use with straight-line Gaussian dispersion plume transport models (*WindVector,
+CRBasic Program Reference for CR1000.Std.32. Campbell Scientific Inc.*)
+
+Recalculating the standard deviation of wind direction from 10 Hz anemometer
+data using the Yamartino algorithm is a relatively straightforward procedure;
+refer to online sources for more details. 
 
 
 ### 2018 May 6-9th
