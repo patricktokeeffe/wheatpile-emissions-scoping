@@ -216,7 +216,7 @@ DataTable(minutely,True,-1)
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
     FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
   Average(1,panel_tmpr,FP2,panel_tmpr=NAN)
-    FieldNames("self_panel_tmpr:logger wiring panel temperature")
+    FieldNames("logger_panel_tmpr:logger wiring panel temperature")
 EndTable
 
 

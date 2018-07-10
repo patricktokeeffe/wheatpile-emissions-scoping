@@ -16,7 +16,7 @@
   not recorded can be reconstructed from 10Hz anemometer data set.)
 * FIX: add missing closing paren (no impact on program operation)
 * Track datalogger wiring panel temperature, for quality assurance: adds new
-  column `self_panel_tmpr` to end of 1-min data tables
+  column `logger_panel_tmpr` to end of 1-min data tables
 * FIX: step back custom menu so users first see a timestamp & card status, then
   press any key to obtain custom menu. Also, for stationary site only (because
   user can change azimuth value using keyboard display), hide present values
