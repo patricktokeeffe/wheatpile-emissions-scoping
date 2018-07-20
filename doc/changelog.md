@@ -6,6 +6,13 @@
 |--------------|---------|-----------------------------|-------------------------|
 | 2018 June 5  | 0.1     | 44463                       | 40156  |
 | 2018 July 10 | 1.0     | 47848                       | 8408   |
+| 2018 July 20 | 2.0     | 18988                       | 8408   |
+
+
+## Version 2.0
+
+* By user special request, add grab sample of sonic anemometer components to
+  1-minute data table
 
 
 ## Version 1.0

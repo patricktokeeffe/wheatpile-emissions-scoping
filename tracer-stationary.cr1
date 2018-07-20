@@ -232,6 +232,12 @@ DataTable(minutely,True,-1)
     FieldNames("csat3b_wnd_spd:mean horizontal wind speed," & _
                "csat3b_unit_wnd_dir:unit vector mean wind direction," & _
                "csat3b_std_wnd_dir:wind direction stdev (Yamartino algorithm)")
+  Sample(5,CSATvals(1),IEEE4)
+    FieldNames("csat3b_Ux:wind vector streamwise component (into array)," & _
+               "csat3b_Uy:wind vector horizontal crosswise component," & _
+               "csat3b_Uz:wind vector vertical component," & _
+               "csat3b_sonicTemp:ultrasonic (virtual) temperature," & _
+               "csat3b_diag:sensor diagnostic word")               
   Average(1,li840a_analog_CO2,IEEE4,li840a_analog_CO2=NAN)
     FieldNames("li840a_analog_CO2:CO2 mixing ratio (analog data)")
   Average(1,panel_tmpr,FP2,panel_tmpr=NAN)

@@ -168,6 +168,11 @@ Complete data records from all analyzers and the GPS, on a common time base.
 | csat3b_wnd_spd       | m/s         | mean horizontal wind speed  |
 | csat3b_unit_wnd_dir  | degreesEofN | unit vector mean wind direction |
 | csat3b_std_wnd_dir   | degrees     | wind direction stdev (Yamartino algorithm) |
+| csat3b_Ux            | m/s         | wind vector streamwise component, into array |
+| csat3b_Uy            | m/s         | wind vector horizontal crosswise component   |
+| csat3b_Uz            | m/s         | wind vector vertical component               |
+| csat3b_sonicTemp     | degC        | ultrasonic (virtual) temperature             |
+| csat3b_diag          | arb         | sensor diagnostic word                       |
 | li840a_analog_CO2    | ppm         | CO<sub>2</sub> mixing ratio (analog data) |
 | logger_panel_tmpr    | degC        | logger wiring panel temperature |
 
