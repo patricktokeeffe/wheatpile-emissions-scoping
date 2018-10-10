@@ -4,7 +4,7 @@
 
 ### Wiring
 
-See this [Word document](wiring.docx). *Sorry, it's a .docx because we can edit
+See this [Word document](../wiring.docx). *Sorry, it's a .docx because we can edit
 it, print it neatly, and still get basic diffs.*
 
 ### Instrument Configuration
