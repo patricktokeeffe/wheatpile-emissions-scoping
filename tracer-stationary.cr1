@@ -8,6 +8,8 @@
 '
 ' Copyright 2018 :: Patrick O'Keeffe
 ' Laboratory for Atmospheric Research at Washington State University
+'
+' Contains adapted example code from Campbell Scientific product docs
 '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 
 ConstTable
